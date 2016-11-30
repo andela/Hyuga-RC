@@ -71,6 +71,7 @@ Template.addressBookAdd.events({
 AutoForm.hooks({
   addressBookAddForm: {
     onSubmit: function (insertDoc) {
+      console.log(insertDoc);
       this.event.preventDefault();
       const addressBook = $(this.template.firstNode).closest(".address-book");
 

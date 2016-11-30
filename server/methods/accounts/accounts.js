@@ -82,6 +82,10 @@ Meteor.methods({
           }
         });
       }
+      let x = {'shopName': 'Ethan & sons', 'shopAddress': 'All over', 'shopDescription': 'We sell everything', 'shopPhone': '34789383874'};
+      if (address.isVendor) {
+        Collections.Shops.insert({name: x.shopName, shopOwnerId: userId, shopDetails: x});
+      }
     }
 
     return Collections.Accounts.upsert({

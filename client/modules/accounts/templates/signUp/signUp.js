@@ -1,5 +1,6 @@
 import { LoginFormSharedHelpers } from "/client/modules/accounts/helpers";
 import { Template } from "meteor/templating";
+import { FlowRouter } from "meteor/kadira:flow-router-ssr";
 
 /**
  * onCreated: Login form sign up view
@@ -75,6 +76,7 @@ Template.loginFormSignUpView.events({
         });
       } else {
         // Close dropdown or navigate to page
+        FlowRouter.go("/reaction/account/profile");
       }
     });
   }
