@@ -14,19 +14,24 @@
         {{> addressBookForm}}
     </fieldset>
     <div class="row text-right">
-      <button type="submit" class="btn btn-primary" data-i18n="app.saveAndContinue" data-event-action="saveAddress">Save and continue</button>
-      {{#if hasAddressBookEntries}}
-      <button type="reset" class="btn btn-default" data-i18n="app.cancel" data-event-action="cancelAddressEdit">Cancel</button>
-      {{/if}}
-    </div>
-  {{/autoForm}}
-  {{#autoForm schema=Schemas.ShopDetails id="shopForm" doc=thisAddress type="normal"}}
-    <fieldset>
-        {{> shopForm}}
-    </fieldset>
-    <div class="row text-right">
-      <button type="submit" class="btn btn-primary" data-event-action="saveShop">Save</button>
-    </div>
+    <button type="submit" class="btn btn-primary" data-i18n="app.saveAndContinue" data-event-action="saveAddress">Save and continue</button>
+    {{#if hasAddressBookEntries}}
+    <button type="reset" class="btn btn-default" data-i18n="app.cancel" data-event-action="cancelAddressEdit">Cancel</button>
+    {{/if}}
+  </div>
   {{/autoForm}}
 </div>
+</template>
+
+<template name="shopAddForm">
+  <div class="panel-control-bar">
+    {{#autoForm schema=Schemas.ShopDetails id="shopForm" doc=thisAddress type="normal"}}
+      <fieldset>
+        {{> shopForm}}
+      </fieldset>
+      <div class="row text-right">
+        <button type="submit" class="btn btn-primary" data-event-action="saveShop">Save</button>
+      </div>
+    {{/autoForm}}
+  </div>
 </template>

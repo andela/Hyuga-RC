@@ -18,6 +18,10 @@ Meteor.methods({
     return false;
   },
 
+  "shop/checkExistence": function (userid) {
+    check(userid, Match.Optional(String));
+    return Collections.Shops.findOne({shopOwnerId: userid});
+  },
   /**
    * accounts/addShop
    * @description add new shop to shop collections

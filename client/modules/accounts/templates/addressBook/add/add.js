@@ -90,6 +90,8 @@ AutoForm.hooks({
   shopForm: {
     onSubmit: function (shopDetails) {
       this.event.preventDefault();
+      const addressBook = $(this.template.firstNode).closest(".address-book");
+
       Meteor.call("accounts/addShop", shopDetails, (error, result) => {
         if (error) {
           Alerts.toast(i18next.t("addressBookAdd.failedToAddAddress", { err: error.message }), "error");
