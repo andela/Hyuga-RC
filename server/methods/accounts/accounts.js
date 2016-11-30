@@ -19,6 +19,25 @@ Meteor.methods({
   },
 
   /**
+   * accounts/addShop
+   * @description add new shop to shop collections
+   * @param {Object} shopInfo - info of the shop
+   * @return {Object} with keys `numberAffected` and `insertedId` if doc was
+   * inserted
+   */
+  "accounts/addShop": function (shopInfo) {
+    // console.log(shopInfo, accountUserId, 'dsfds');
+    // Meteor.userId()
+    check(shopInfo, Schemas.ShopDetails);
+    Collections.Shops.insert({
+      name: shopInfo.shopName,
+      shopOwnerId: Meteor.userId(),
+      shopDetails: shopInfo
+    });
+    console.log('none');
+  },
+
+  /**
    * accounts/addressBookAdd
    * @description add new addresses to an account
    * @param {Object} address - address
@@ -81,10 +100,6 @@ Meteor.methods({
             "profile.addressBook.$.isBillingDefault": false
           }
         });
-      }
-      let x = {'shopName': 'Ethan & sons', 'shopAddress': 'All over', 'shopDescription': 'We sell everything', 'shopPhone': '34789383874'};
-      if (address.isVendor) {
-        Collections.Shops.insert({name: x.shopName, shopOwnerId: userId, shopDetails: x});
       }
     }
 

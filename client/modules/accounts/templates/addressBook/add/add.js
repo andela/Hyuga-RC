@@ -81,6 +81,22 @@ AutoForm.hooks({
           this.done(new Error("Failed to add address: ", error));
           return false;
         }
+        if (result && !insertDoc.isVendor) {
+          this.done();
+          addressBook.trigger($.Event("showMainView"));
+        }
+      });
+    }
+  },
+  shopForm: {
+    onSubmit: function (shopDetails) {
+      this.event.preventDefault();
+      Meteor.call("accounts/addShop", shopDetails, (error, result) => {
+        if (error) {
+          Alerts.toast(i18next.t("addressBookAdd.failedToAddAddress", { err: error.message }), "error");
+          this.done(new Error("Failed to add Shop: ", error));
+          return false;
+        }
         if (result) {
           this.done();
           addressBook.trigger($.Event("showMainView"));

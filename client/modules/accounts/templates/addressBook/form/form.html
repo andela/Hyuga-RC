@@ -9,9 +9,12 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-6 form-group{{#if afFieldIsInvalid name='test'}} has-error{{/if}}">
-      <label class="control-label">{{afFieldLabelText name='test'}}</label>
-      {{>afFieldInput name="test" value=fullName autofocus=''}}
+  <div class="col-md-6 form-group{{#if afFieldIsInvalid name='fullName'}} has-error{{/if}}">
+      <label class="control-label">{{afFieldLabelText name='fullName'}}</label>
+      {{>afFieldInput name="fullName" value=fullName autofocus=''}}
+      {{#if afFieldIsInvalid name="fullName"}}
+      <span class="help-block">{{afFieldMessage name="fullName"}}</span>
+      {{/if}}
   </div>
 </div>
 <div class="row">
