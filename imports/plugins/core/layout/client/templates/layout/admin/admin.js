@@ -24,20 +24,28 @@ Template.coreAdminLayout.helpers({
     });
 
     const items = [];
+    const introMessages = [
+      "This is your dashboard. You can visit your dashboard to know a few of your controls",
+      "This is the orders page. You can view your orders here",
+      "This is your accounts page. You can view your account information here"
+    ];
 
     if (_.isArray(shortcuts)) {
-      for (const shortcut of shortcuts) {
+      for (let i = 0; i < shortcuts.length; i++) {
         items.push({
-          type: "link",
-          href: Reaction.Router.pathFor(shortcut.name),
-          className: Reaction.Router.isActiveClassName(shortcut.name),
-          icon: shortcut.icon,
-          tooltip: shortcut.label || "",
-          i18nKeyTooltip: shortcut.i18nKeyLabel,
-          tooltipPosition: "left middle"
+          "type": "link",
+          "href": Reaction.Router.pathFor(shortcuts[i].name),
+          "className": Reaction.Router.isActiveClassName(shortcuts[i].name),
+          "icon": shortcuts[i].icon,
+          "tooltip": shortcuts[i].label || "",
+          "i18nKeyTooltip": shortcuts[i].i18nKeyLabel,
+          "tooltipPosition": "left middle",
+          "data-step": i + 1,
+          "data-intro": introMessages[i]
         });
       }
     }
+
 
     items.push({
       type: "seperator"
