@@ -29,12 +29,11 @@ Meteor.methods({
     // console.log(shopInfo, accountUserId, 'dsfds');
     // Meteor.userId()
     check(shopInfo, Schemas.ShopDetails);
-    Collections.Shops.insert({
+    return Collections.Shops.insert({
       name: shopInfo.shopName,
       shopOwnerId: Meteor.userId(),
       shopDetails: shopInfo
     });
-    console.log('none');
   },
 
   /**

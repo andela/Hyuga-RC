@@ -28,7 +28,9 @@ Template.addressBook.onCreated(function () {
           if (account.profile.addressBook.length === 0) {
             this.currentViewTemplate.set("addressBookAdd");
           } else {
-            this.currentViewTemplate.set("addressBookGrid");
+            if (!account.profile.addressBook[0].isVendor) {
+              this.currentViewTemplate.set("addressBookGrid");
+            }
           }
         }
       }
