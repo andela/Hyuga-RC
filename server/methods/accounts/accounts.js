@@ -18,10 +18,17 @@ Meteor.methods({
     return false;
   },
 
+   /**
+   * shop/checkExistenc
+   * @description checks if the user has created a shop
+   * @param {String} userid - the id of the user
+   * @return {Object} the shop details or null
+   */
   "shop/checkExistence": function (userid) {
     check(userid, Match.Optional(String));
     return Collections.Shops.findOne({shopOwnerId: userid});
   },
+
   /**
    * accounts/addShop
    * @description add new shop to shop collections
@@ -30,9 +37,15 @@ Meteor.methods({
    * inserted
    */
   "accounts/addShop": function (shopInfo) {
-    // console.log(shopInfo, accountUserId, 'dsfds');
-    // Meteor.userId()
     check(shopInfo, Schemas.ShopDetails);
+    userDetails = Meteor.users.findOne({_id: Meteor.userId()});
+    rolesKey = Object.keys(userDetails.roles);
+    userDetails.roles[rolesKey[0]].push(
+      "dashboard/orders",
+      "dashboard",
+      "createProduct"
+    );
+    Meteor.users.update({_id: Meteor.userId()}, {$set: {roles: userDetails.roles}});
     return Collections.Shops.insert({
       name: shopInfo.shopName,
       shopOwnerId: Meteor.userId(),
