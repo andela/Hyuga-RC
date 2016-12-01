@@ -41,9 +41,12 @@ Meteor.methods({
     userDetails = Meteor.users.findOne({_id: Meteor.userId()});
     rolesKey = Object.keys(userDetails.roles);
     userDetails.roles[rolesKey[0]].push(
-      "dashboard/orders",
       "dashboard",
-      "createProduct"
+      "createProduct",
+      "reaction-dashboard",
+      "reaction-orders",
+      "orders",
+      "dashboard/orders"
     );
     Meteor.users.update({_id: Meteor.userId()}, {$set: {roles: userDetails.roles}});
     return Collections.Shops.insert({
