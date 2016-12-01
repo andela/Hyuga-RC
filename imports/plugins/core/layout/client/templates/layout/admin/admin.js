@@ -25,9 +25,9 @@ Template.coreAdminLayout.helpers({
 
     const items = [];
     const introMessages = [
-      "This is your dashboard. You can visit your dashboard to know a few of your controls",
-      "This is the orders page. You can view your orders here",
-      "This is your accounts page. You can view your account information here"
+      "You can visit your dashboard, via here, to see all functionality available for your use",
+      "This links you to the orders section; to see the status of your orders",
+      "This links to your accounts section where You can access your account information"
     ];
 
     if (_.isArray(shortcuts)) {
@@ -41,7 +41,8 @@ Template.coreAdminLayout.helpers({
           "i18nKeyTooltip": shortcuts[i].i18nKeyLabel,
           "tooltipPosition": "left middle",
           "data-step": i + 1,
-          "data-intro": introMessages[i]
+          "data-intro": introMessages[i],
+          "data-position": "auto"
         });
       }
     }
