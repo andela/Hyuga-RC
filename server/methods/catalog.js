@@ -668,8 +668,11 @@ Meteor.methods({
       return Products.insert(product);
     }
 
+    const shopId = Reaction.getVendorId(Meteor.userId());
+
     return Products.insert({
-      type: "simple" // needed for multi-schema
+      type: "simple", // needed for multi-schema
+      shopId: shopId
     }, {
       validate: false
     }, (error, result) => {
@@ -679,7 +682,8 @@ Meteor.methods({
           ancestors: [result],
           price: 0.00,
           title: "",
-          type: "variant" // needed for multi-schema
+          type: "variant", // needed for multi-schema
+          shopId: shopId
         });
       }
     });

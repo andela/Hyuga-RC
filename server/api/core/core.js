@@ -164,8 +164,8 @@ export default {
   },
 
   // Use the current user Id to get the shop Id
-  getVendorId(vendorID) {
-    const shop = Shops.find({shopOwnerId: vendorID}).fetch()[0];
+  getVendorId(userId) {
+    const shop = Shops.find({shopOwnerId: userId}).fetch()[0];
     return (shop) ? shop && shop._id : false; // Return the shop details or false.
   },
 
