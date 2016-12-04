@@ -19,7 +19,9 @@ Template.productGrid.onCreated(function () {
   });
   if (Reaction.hasPermission("createProduct")) {
     Meteor.call("shop/getShopId", Meteor.userId(), (err, res) => {
-      instance.state.set("userShopId", res._id);
+      if (res) {
+        instance.state.set("userShopId", res._id);
+      }
     });
   }
 });

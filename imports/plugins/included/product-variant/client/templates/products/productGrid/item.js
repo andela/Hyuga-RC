@@ -128,7 +128,11 @@ Template.productGridItems.helpers({
   // check if user was the creator of the product
   isProductCreator: () => {
     const product = Template.instance().data;
-    return product.shopId === product.viewerShopId;
+    if (product.viewerShopId) {
+      return product.shopId === product.viewerShopId;
+    } else if (Reaction.hasPermission("admin")) {
+      return Reaction.getShopId() === product.shopId;
+    }
   }
 });
 

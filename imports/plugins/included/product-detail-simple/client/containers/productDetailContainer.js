@@ -154,8 +154,8 @@ class ProductDetailContainer extends Component {
             onAddToCart={this.handleAddToCart}
             onCartQuantityChange={this.handleCartQuantityChange}
             onViewContextChange={this.handleViewContextChange}
-            socialComponent={<SocialContainer />}
-            topVariantComponent={<VariantListContainer />}
+            socialComponent={<SocialContainer editRight={this.props.hasAdminPermission} />}
+            topVariantComponent={<VariantListContainer editRight={this.props.hasAdminPermission} />}
             onDeleteProduct={this.handleDeleteProduct}
             onProductFieldChange={this.handleProductFieldChange}
             {...this.props}
@@ -167,6 +167,7 @@ class ProductDetailContainer extends Component {
 }
 
 ProductDetailContainer.propTypes = {
+  hasAdminPermission: PropTypes.bool,
   media: PropTypes.arrayOf(PropTypes.object),
   product: PropTypes.object
 };
@@ -253,10 +254,8 @@ function composer(props, onData) {
 
       if (Reaction.hasPermission(["createProduct"])) {
         Meteor.call("shop/getShopId", Meteor.userId(), (err, res) => {
-          if (!res && !err) {
-            editable = true;
-            hasAdminPermission = true;
-          } else if (res && res._id === product.shopId) {
+          if ((res && res._id === product.shopId) ||
+          (!res && Reaction.hasPermission("admin") && Reaction.getShopId() === product.shopId)) {
             editable = true;
             hasAdminPermission = true;
           }

@@ -10,13 +10,10 @@ import { GeoCoder, Logger, Reaction } from "/server/api";
  * Reaction Shop Methods
  */
 Meteor.methods({
-  "shop/getShopId": function (userId) {
-    check(userId, Match.Optional(String));
-    return Collections.Shops.findOne({ shopOwnerId: userId });
-  },
-
   /**
    * shop/getShopId
+   * @param {string} userId: id of the logged in user
+   * @return {object} shop details
    */
   "shop/getShopId": function (userId) {
     check(userId, Match.Optional(String));
