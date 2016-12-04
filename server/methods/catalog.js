@@ -771,21 +771,29 @@ Meteor.methods({
    * latest changes. its used for products and variants
    * @return {Number} returns update result
    */
-  "products/updateSoldField": function (_id) {
+  "products/updateProductField": function (_id, field, value) {
     check(_id, String);
+    check(field, String);
+    check(value, Match.OneOf(String, Object, Array, Boolean));
     // must have createProduct permission
     if (!Reaction.hasPermission("createProduct")) {
       throw new Meteor.Error(403, "Access Denied");
     }
 
-    const product = Products.findOne(_id);
-    const type = product.type;
-    const sold = parseInt(product.numSold, 10) + 1;
-    const numSold = sold.toString();
+    const doc = Products.findOne(_id);
+    const type = doc.type;
+    let update;
+    // handle booleans with correct typing
+    if (value === 'false' || value === 'true') {
+      update = EJSON.parse(`{${field}:${value}}`);
+    } else {
+      const stringValue = EJSON.stringify(value);
+      update = EJSON.parse("{\"" + field + "\":" + stringValue + "}");
+    }
 
     // we need to use sync mode here, to return correct error and result to UI
     const result = Products.update(_id, {
-      $addToSet: {numSold: numSold}
+      $set: update
     }, {
       selector: {
         type: type
