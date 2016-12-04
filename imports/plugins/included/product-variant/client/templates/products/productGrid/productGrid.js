@@ -12,6 +12,16 @@ import Sortable from "sortablejs";
 
 Template.productGrid.onCreated(function () {
   Session.set("productGrid/selectedProducts", []);
+  const instance = this;
+  instance.state = new ReactiveDict();
+  this.state.setDefault({
+    userShopId: null
+  });
+  if (Reaction.hasPermission("createProduct")) {
+    Meteor.call("shop/getShopId", Meteor.userId(), (err, res) => {
+      instance.state.set("userShopId", res._id);
+    });
+  }
 });
 
 Template.productGrid.onRendered(function () {
@@ -91,6 +101,12 @@ Template.productGrid.helpers({
     return Template.instance().state.equals("canLoadMoreProducts", true);
   },
   products() {
+    Template.currentData().products.map((eachProd) => {
+      if (Reaction.hasPermission('createProduct')) {
+        eachProd.viewerShopId = Template.instance().state.get("userShopId");
+        return eachProd;
+      }
+    });
     return Template.currentData().products;
   }
 });
