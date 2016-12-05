@@ -52,14 +52,13 @@ Template.productGrid.onRendered(function () {
 
   // Start Tour for New Users Automatically
   const currentUser = Accounts.findOne(Meteor.userId());
-  const myIntro = introJs();
+  const myIntro = introJs().setOption("showProgress", true)
+    .setOption("showStepNumbers", false);
 
   if (Meteor.user().emails.length > 0 && !currentUser.takenTour) {
     myIntro.start();
-  }
-  myIntro.oncomplete(() => {
     Accounts.update({_id: Meteor.userId()}, {$set: {takenTour: true}});
-  });
+  }
 });
 
 Template.productGrid.events({
