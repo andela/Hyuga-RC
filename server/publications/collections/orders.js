@@ -17,10 +17,13 @@ Meteor.publish("Orders", function () {
     return Orders.find({
       shopId: shopId
     });
-  } else if (Reaction.getVendorId(this.userId)) { // Check if this user has a shop
-    return Orders.find({                        // return all orders from his shop.
-      shopId: Reaction.getVendorId(this.userId) // TODO: When making order set storeID of
-    });                                         // the vendor who registered the product.
+  } else if (Reaction.getVendorId(this.userId)) {
+    const allOrders = Orders.find({ items:
+    { $elemMatch:
+        { shopId: Reaction.getVendorId(this.userId)}
+    }
+    });
+    return allOrders;
   }
   return Orders.find({
     shopId: shopId,
