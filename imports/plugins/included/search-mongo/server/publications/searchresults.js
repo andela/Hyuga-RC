@@ -70,6 +70,34 @@ function getProductFindTerm(searchTerm, searchTags, priceRange, brandPicked, use
   const shopId = Reaction.getShopId();
   const findTerm = checkPriceRange(priceRange, shopId, searchTerm);
   if (searchTags.length > 0) {
+  const findTerm = {
+    $and: [
+      { shopId: shopId },
+      { $or: [
+        { title: {
+          $regex: searchTerm,
+          $options: "i"
+        } },
+        { hashtags: {
+          $regex: searchTerm,
+          $options: "i"
+        } },
+        { description: {
+          $regex: searchTerm,
+          $options: "i"
+        } },
+        { handle: {
+          $regex: searchTerm,
+          $options: "i"
+        } },
+        { price: {
+          $regex: searchTerm,
+          $options: "i"
+        } }
+      ] }
+    ]};
+  }
+  if (searchTags.length) {
     findTerm.hashtags = {$all: searchTags};
   }
   if (typeof brandPicked === "string") {

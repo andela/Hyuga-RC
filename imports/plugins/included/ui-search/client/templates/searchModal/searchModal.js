@@ -28,7 +28,8 @@ Template.searchModal.onCreated(function () {
     canLoadMoreProducts: false,
     searchQuery: "",
     productSearchResults: [],
-    tagSearchResults: []
+    tagSearchResults: [],
+    suggestionSearchResults: []
   });
 
 
@@ -99,6 +100,10 @@ Template.searchModal.onCreated(function () {
         const tagResults = Tags.find({
           _id: { $in: hashtags }
         }).fetch();
+
+        const suggestionsResult = productResults.map(product => product.title);
+
+        this.state.set("suggestionSearchResults", suggestionsResult);
         this.state.set("tagSearchResults", tagResults);
         this.state.set("brandSearchResult", brands);
 
@@ -120,6 +125,7 @@ Template.searchModal.onCreated(function () {
         this.state.set("orderSearchResults", "");
         this.state.set("productSearchResults", "");
         this.state.set("tagSearchResults", "");
+        this.state.set("suggestionSearchResults", "");
       }
 
       /*
@@ -136,6 +142,7 @@ Template.searchModal.onCreated(function () {
         this.state.set("accountSearchResults", "");
         this.state.set("productSearchResults", "");
         this.state.set("tagSearchResults", "");
+        this.state.set("suggestionSearchResults", "");
       }
     }
   });
@@ -234,6 +241,10 @@ Template.searchModal.helpers({
     if (typeof sellerPicked === "string") {
       instance.state.set("bestSellers", sellerPicked);
     }
+  },
+  suggestionSearchResults() {
+    const instance = Template.instance();
+    return instance.state.get("suggestionSearchResults");
   },
   showSearchResults() {
     return false;
