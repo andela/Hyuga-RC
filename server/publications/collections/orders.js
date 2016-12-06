@@ -10,6 +10,7 @@ Meteor.publish("Orders", function () {
     return this.ready();
   }
   const shopId = Reaction.getShopId();
+  const vendorId = Reaction.getVendorId(this.userId);
   if (!shopId) {
     return this.ready();
   }
@@ -17,10 +18,10 @@ Meteor.publish("Orders", function () {
     return Orders.find({
       shopId: shopId
     });
-  } else if (Reaction.getVendorId(this.userId)) {
+  } else if (vendorId) {
     const allOrders = Orders.find({ items:
     { $elemMatch:
-        { shopId: Reaction.getVendorId(this.userId)}
+        { shopId: vendorId}
     }
     });
     return allOrders;

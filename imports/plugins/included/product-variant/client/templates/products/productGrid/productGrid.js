@@ -110,8 +110,5 @@ Template.productGrid.helpers({
       }
     });
     return Template.currentData().products;
-  },
-  vendorId() {
-    return 10;
   }
 });
