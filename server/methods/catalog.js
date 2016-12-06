@@ -758,7 +758,45 @@ Meteor.methods({
     throw new Meteor.Error(304, "Something went wrong, nothing was deleted");
   },
 
-  /**
+    /**
+   * products/updateSoldField
+   * @summary update single product or variant field
+   * @param {String} _id - product._id or variant._id to update
+   * 
+   * @return {Number} returns update result
+   */
+  "products/updateSoldField": function (_id) {
+    check(_id, String);
+    // must have createProduct permission
+    if (!Reaction.hasPermission("createProduct")) {
+      throw new Meteor.Error(403, "Access Denied");
+    }
+
+    const product = Products.findOne(_id);
+    console.log(product);
+    const type = product.type;
+    const sold = parseInt(product.numSold, 10) + 1;
+    const numSold = sold.toString();
+    console.log(sold, type);
+
+    // we need to use sync mode here, to return correct error and result to UI
+    const result = Products.update(_id, {
+      $addToSet: { numSold: numSold }
+    }, {
+      selector: {
+        type: type
+      }
+    });
+    console.log(result);
+    if (typeof result === "number") {
+      if (type === "variant" && ~toDenormalize.indexOf(field)) {
+        denormalize(doc.ancestors[0], field);
+      }
+    }
+    return result;
+  },
+
+/**
    * products/updateProductField
    * @summary update single product or variant field
    * @param {String} _id - product._id or variant._id to update
@@ -784,7 +822,7 @@ Meteor.methods({
     const type = doc.type;
     let update;
     // handle booleans with correct typing
-    if (value === 'false' || value === 'true') {
+    if (value === "false" || value === "true") {
       update = EJSON.parse(`{${field}:${value}}`);
     } else {
       const stringValue = EJSON.stringify(value);
@@ -799,7 +837,7 @@ Meteor.methods({
         type: type
       }
     });
-
+    console.log(result);
     if (typeof result === "number") {
       if (type === "variant" && ~toDenormalize.indexOf(field)) {
         denormalize(doc.ancestors[0], field);

@@ -38,9 +38,9 @@ Template.coreOrderShippingTracking.events({
         productIds.push(items[count].productId);
       }
     }
-
+    Meteor.call("orders/shipmentShipped", template.order, template.order.shipping[0]);
     productIds.map((id) => {
-      Meteor.call("orders/updateSoldField", id);
+      Meteor.call("products/updateSoldField", id);
     });
     // Meteor.call("workflow/pushOrderShipmentWorkflow", "coreOrderShipmentWorkflow", "orderShipped", this._id);
   },
