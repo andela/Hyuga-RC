@@ -3,7 +3,7 @@ import { EJSON } from "meteor/ejson";
 import { check } from "meteor/check";
 import { Meteor } from "meteor/meteor";
 import { Catalog } from "/lib/api";
-import { Media, Products, Revisions, Tags } from "/lib/collections";
+import { Media, Products, ProductSearch, Revisions, Tags } from "/lib/collections";
 import { Logger, Reaction } from "/server/api";
 
 /**
@@ -773,21 +773,18 @@ Meteor.methods({
     }
 
     const product = Products.findOne(_id);
-    console.log(product);
     const type = product.type;
-    const sold = parseInt(product.numSold, 10) + 1;
+    const sold = parseInt(product.numSold) + 1;
     const numSold = sold.toString();
-    console.log(sold, type);
 
     // we need to use sync mode here, to return correct error and result to UI
-    const result = Products.update(_id, {
-      $addToSet: { numSold: numSold }
+    const result = ProductSearch.update(_id, {
+      $set: { numSold: numSold }
     }, {
       selector: {
         type: type
       }
     });
-    console.log(result);
     if (typeof result === "number") {
       if (type === "variant" && ~toDenormalize.indexOf(field)) {
         denormalize(doc.ancestors[0], field);
@@ -837,7 +834,6 @@ Meteor.methods({
         type: type
       }
     });
-    console.log(result);
     if (typeof result === "number") {
       if (type === "variant" && ~toDenormalize.indexOf(field)) {
         denormalize(doc.ancestors[0], field);

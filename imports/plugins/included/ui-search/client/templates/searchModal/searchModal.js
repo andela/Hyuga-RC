@@ -49,7 +49,7 @@ Template.searchModal.onCreated(function () {
   this.autorun(() => {
     const searchCollection = this.state.get("searchCollection") || "products";
     const searchQuery = this.state.get("searchQuery");
-     const brandPicked = this.state.get("brandPicked");
+    const brandPicked = this.state.get("brandPicked");
     const priceRange = this.state.get("priceRange");
     const facets = this.state.get("facets") || [];
     const sub = this.subscribe("SearchResults", searchCollection, searchQuery,
@@ -61,7 +61,7 @@ Template.searchModal.onCreated(function () {
        */
       if (searchCollection === "products") {
         const rangeBestSeller = this.state.get("bestSellers");
-        let bestSort = "";
+        let bestSort;
         switch (rangeBestSeller) {
           case "high-low":
             bestSort = -1;
@@ -70,9 +70,7 @@ Template.searchModal.onCreated(function () {
           case "low-high":
             bestSort = 1;
             break;
-
           default:
-            break;
         }
         const productResults = ProductSearch.find({}, {
           sort:
@@ -217,8 +215,8 @@ Template.searchModal.helpers({
   bestSellers() {
     return [
       { value: "one", label: "Filter by seller" },
-      { value: "two", label: "Highest-Lowest" },
-      { value: "two", label: "Lowest-Highest" }
+      { value: "high-low", label: "Highest-Lowest" },
+      { value: "low-high", label: "Lowest-Highest" }
     ];
   },
   brandSelect() {
