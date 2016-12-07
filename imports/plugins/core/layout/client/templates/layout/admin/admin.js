@@ -31,17 +31,17 @@ Template.coreAdminLayout.helpers({
     ];
 
     if (_.isArray(shortcuts)) {
-      for (let i = 0; i < shortcuts.length; i++) {
+      for (let item = 0; item < shortcuts.length; item++) {
         items.push({
           "type": "link",
-          "href": Reaction.Router.pathFor(shortcuts[i].name),
-          "className": Reaction.Router.isActiveClassName(shortcuts[i].name),
-          "icon": shortcuts[i].icon,
-          "tooltip": shortcuts[i].label || "",
-          "i18nKeyTooltip": shortcuts[i].i18nKeyLabel,
+          "href": Reaction.Router.pathFor(shortcuts[item].name),
+          "className": Reaction.Router.isActiveClassName(shortcuts[item].name),
+          "icon": shortcuts[item].icon,
+          "tooltip": shortcuts[item].label || "",
+          "i18nKeyTooltip": shortcuts[item].i18nKeyLabel,
           "tooltipPosition": "left middle",
-          "data-step": i + 1,
-          "data-intro": introMessages[i],
+          "data-step": item + 1,
+          "data-intro": introMessages[item],
           "data-position": "auto"
         });
       }
