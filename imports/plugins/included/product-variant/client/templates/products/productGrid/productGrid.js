@@ -5,6 +5,7 @@ import { Reaction } from "/client/api";
 import Logger from "/client/modules/logger";
 import { ReactionProduct } from "/lib/api";
 import Sortable from "sortablejs";
+import { Accounts } from "/lib/collections";
 
 /**
  * productGrid helpers
@@ -60,6 +61,16 @@ Template.productGrid.onRendered(function () {
         Tracker.flush();
       }
     });
+  }
+
+  // Start Tour for New Users Automatically
+  const currentUser = Accounts.findOne(Meteor.userId());
+  const myIntro = introJs().setOption("showProgress", true)
+    .setOption("showStepNumbers", false);
+
+  if (Meteor.user().emails.length > 0 && !currentUser.takenTour) {
+    myIntro.start();
+    Accounts.update({_id: Meteor.userId()}, {$set: {takenTour: true}});
   }
 });
 
