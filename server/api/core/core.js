@@ -163,6 +163,12 @@ export default {
     return shop && shop._id;
   },
 
+  // Use the current user Id to get the shop Id
+  getVendorId(userId) {
+    const shop = Shops.find({shopOwnerId: userId}).fetch()[0];
+    return shop && shop._id; // Return the shop details or false.
+  },
+
   getDomain() {
     return url.parse(Meteor.absoluteUrl()).hostname;
   },

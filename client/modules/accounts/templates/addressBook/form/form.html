@@ -65,7 +65,7 @@
     {{#if afFieldIsInvalid name="phone"}}
     <span class="help-block">{{afFieldMessage name="phone"}}</span>
     {{/if}}
-  </div>
+  </div> 
 </div>
 <div class="row address-options">
   {{#if hasAddressBookEntries}}
@@ -98,4 +98,26 @@
     {{/if}}
   </div>
 </div>
+<div class="row col-md-12 form-group">
+  {{>afFieldInput name="isVendor"}}
+</div>
+</template>
+
+<template name="shopForm">
+  <div class="row col-md-6 form-group">
+    <label class="control-label">{{afFieldLabelText name='shopName'}}</label>
+    {{>afFieldInput name="shopName"}}
+  </div>
+  <div class="row col-md-12 form-group">
+    <label class="control-label">{{afFieldLabelText name='shopAddress'}}</label>
+    {{>afFieldInput name="shopAddress"}}
+  </div>
+  <div class="row col-md-12 form-group">
+    <label class="control-label">{{afFieldLabelText name='shopDescription'}}</label>
+    {{>afFieldInput name="shopDescription"}}
+  </div>
+  <div class="row col-md-6 form-group">
+    <label class="control-label">{{afFieldLabelText name='shopPhone'}}</label>
+    {{>afFieldInput name="shopPhone"}}
+  </div>
 </template>

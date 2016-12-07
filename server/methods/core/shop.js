@@ -11,6 +11,16 @@ import { GeoCoder, Logger, Reaction } from "/server/api";
  */
 Meteor.methods({
   /**
+   * shop/getShopId
+   * @param {string} userId: id of the logged in user
+   * @return {object} shop details
+   */
+  "shop/getShopId": function (userId) {
+    check(userId, Match.Optional(String));
+    return Collections.Shops.findOne({ shopOwnerId: userId });
+  },
+
+  /**
    * shop/createShop
    * @param {String} shopAdminUserId - optionally create shop for provided userId
    * @param {Object} shopData - optionally provide shop object to customize

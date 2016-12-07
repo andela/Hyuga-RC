@@ -18,6 +18,44 @@ Meteor.methods({
     return false;
   },
 
+   /**
+   * shop/checkExistenc
+   * @description checks if the user has created a shop
+   * @param {String} userid - the id of the user
+   * @return {Object} the shop details or null
+   */
+  "shop/checkExistence": function (userid) {
+    check(userid, Match.Optional(String));
+    return Collections.Shops.findOne({shopOwnerId: userid});
+  },
+
+  /**
+   * accounts/addShop
+   * @description add new shop to shop collections
+   * @param {Object} shopInfo - info of the shop
+   * @return {Object} with keys `numberAffected` and `insertedId` if doc was
+   * inserted
+   */
+  "accounts/addShop": function (shopInfo) {
+    check(shopInfo, Schemas.ShopDetails);
+    userDetails = Meteor.users.findOne({_id: Meteor.userId()});
+    rolesKey = Object.keys(userDetails.roles);
+    userDetails.roles[rolesKey[0]].push(
+      "dashboard",
+      "createProduct",
+      "reaction-dashboard",
+      "reaction-orders",
+      "orders",
+      "dashboard/orders"
+    );
+    Meteor.users.update({_id: Meteor.userId()}, {$set: {roles: userDetails.roles}});
+    return Collections.Shops.insert({
+      name: shopInfo.shopName,
+      shopOwnerId: Meteor.userId(),
+      shopDetails: shopInfo
+    });
+  },
+
   /**
    * accounts/addressBookAdd
    * @description add new addresses to an account

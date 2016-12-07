@@ -27,6 +27,7 @@ class ProductDetail extends Component {
   }
 
   get editable() {
+    // console.log(this.props.editable);
     return this.props.editable;
   }
 

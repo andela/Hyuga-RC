@@ -86,13 +86,15 @@ Meteor.methods({
     if (!cart.items) {
       return [];
     }
-    // create an array of shops, allowing
-    // the cart to have products from multiple shops
-    for (const product of products) {
-      if (product.shopId) {
-        shops.push(product.shopId);
-      }
-    }
+    // this should be edited to cater for multi shipping (where each shop
+    // his shipping details)
+    // // create an array of shops, allowing
+    // // the cart to have products from multiple shops
+    // for (const product of products) {
+    //   if (product.shopId) {
+    //     shops.push(product.shopId);
+    //   }
+    // }
     // if we have multiple shops in cart
     if ((shops !== null ? shops.length : void 0) > 0) {
       selector = {
@@ -101,7 +103,6 @@ Meteor.methods({
         }
       };
     }
-
     const shippingMethods = Shipping.find(selector);
 
     shippingMethods.forEach(function (shipping) {

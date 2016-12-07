@@ -10,13 +10,20 @@ Meteor.publish("Orders", function () {
     return this.ready();
   }
   const shopId = Reaction.getShopId();
+  const vendorId = Reaction.getVendorId(this.userId);
   if (!shopId) {
     return this.ready();
   }
   if (Roles.userIsInRole(this.userId, ["admin", "owner"], shopId)) {
-    return Orders.find({
-      shopId: shopId
+    const allOrders = Orders.find({ items:
+      { $elemMatch: { shopId: shopId}}
     });
+    return allOrders;
+  } else if (vendorId) {
+    const allOrders = Orders.find({ items:
+      { $elemMatch: { shopId: vendorId}}
+    });
+    return allOrders;
   }
   return Orders.find({
     shopId: shopId,

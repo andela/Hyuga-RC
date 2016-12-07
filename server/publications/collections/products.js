@@ -84,8 +84,7 @@ Meteor.publish("Products", function (productScrollLimit = 24, productFilters, so
       ancestors: {
         $exists: true,
         $eq: []
-      },
-      shopId: shop._id
+      }
     };
 
     if (productFilters) {
