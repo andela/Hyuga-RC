@@ -17,6 +17,7 @@ Template.productGrid.onCreated(function () {
   this.state.setDefault({
     userShopId: null
   });
+
   if (Reaction.hasPermission("createProduct")) {
     Meteor.call("shop/getShopId", Meteor.userId(), (err, res) => {
       if (res) {
