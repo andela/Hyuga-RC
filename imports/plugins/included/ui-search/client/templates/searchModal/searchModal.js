@@ -179,7 +179,7 @@ Template.searchModal.helpers({
   },
   priceOptions() {
     return [
-      { value: "null", label: "Filter by price" },
+      { value: "null", label: "Select Price" },
       { value: "all", label: "All prices" },
       { value: "below-10", label: "below - $10" },
       { value: "10-55", label: "$10 - $55" },
@@ -195,7 +195,7 @@ Template.searchModal.helpers({
     if (brands) {
       let results = [{
         value: "&null&",
-        label: "Filter by brand"
+        label: "Select brand"
       },
         {
           value: "&all&",
@@ -214,7 +214,7 @@ Template.searchModal.helpers({
   },
   bestSellers() {
     return [
-      { value: "one", label: "Filter by seller" },
+      { value: "one", label: "Select sales range" },
       { value: "high-low", label: "Highest-Lowest" },
       { value: "low-high", label: "Lowest-Highest" }
     ];
