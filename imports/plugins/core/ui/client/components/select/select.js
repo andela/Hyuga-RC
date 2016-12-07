@@ -12,6 +12,17 @@ Template.select.onCreated(function () {
  */
 Template.select.events({
   "change select, change input"(event, template) {
+    if (template.data.typeOf === "priceOption") {
+      Session.set("pickedOption", event.target.value);
+    }
+    if (template.data.typeOf === "brandOption") {
+      Session.set("pickedBrand", event.target.value);
+    }
+    if (template.data.typeOf === "bestSeller") {
+      Session.set("sellerPicked", event.target.value);
+    }
+  },
+  "change input"(event, template) {
     if (template.data.onSelect) {
       template.data.onSelect(event.target.value, event);
     }

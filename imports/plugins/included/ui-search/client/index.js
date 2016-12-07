@@ -9,6 +9,7 @@ import "./templates/searchModal/searchResults.html";
 import "./templates/productSearch/productResults.html";
 import "./templates/productSearch/productResults.js";
 import "./templates/productSearch/productSearchTags.html";
+import "./templates/productSearch/productSearchTags.js";
 import "./templates/productSearch/productItem.html";
 import "./templates/productSearch/productItem.js";
 import "./templates/productSearch/content.html";

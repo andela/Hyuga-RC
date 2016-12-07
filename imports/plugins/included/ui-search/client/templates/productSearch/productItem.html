@@ -1,5 +1,5 @@
 <template name="productItem">
-  <li class="product-grid-item {{#if positions.pinned}}pinned{{/if}} {{weightClass}} {{isSelected}}" data-id="{{product._id}}" id="{{product._id}}">
+  <li class="product-grid-item {{#if positions.pinned}}pinned{{/if}} {{weightClass}} {{isSelected}}" data-id="{{product._id}}" id="{{product._id}}" style="z-index:1000">
     <div class="item-content">
       {{> gridNotice}}
       <span class="product-grid-item-alerts">
