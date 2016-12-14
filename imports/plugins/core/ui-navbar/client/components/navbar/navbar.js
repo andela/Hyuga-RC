@@ -5,6 +5,16 @@ import { Tags } from "/lib/collections";
 
 Template.CoreNavigationBar.onCreated(function () {
   this.state = new ReactiveDict();
+  this.notification = ReactiveVar();
+
+  // Create an auto run to Check for notifications on page load
+  // and set the notification reactive variable.
+  this.autorun(() => {
+    const instance = this;
+    Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
+      instance.notification.set(!!res);
+    });
+  });
 });
 
 /**
@@ -41,13 +51,12 @@ Template.CoreNavigationBar.helpers({
       // }
     };
   },
-  NotificationButtonComponent(notification) {
-    // Set the state of the notification Icon based
-    // on the notification argumant passed in from the view
-    // it defaults to false if none is set.
-    const state = (notification) ? notification : false;
-    const bell = (state) ? "fa fa-bell" : "fa fa-bell-o";
-    console.log(Meteor.userId());
+  NotificationButtonComponent() {
+    // Check if the user has pending notifications
+    // and set the appropriate Icon
+    let bell = (Template.instance().notification.get())
+    ? "fa fa-bell"
+    : "fa fa-bell-o";
     return {
       component: FlatButton,
       icon: bell,

@@ -317,9 +317,19 @@ Meteor.methods({
 
   /**
    * Get user notifications
+   * @param {String} currentUserId - ID of the current user
+   * @return {Boolean} - the notification object or false
    */
 
   "notifications/getNotifications": function (currentUserId) {
+    try {
+      check(currentUserId, String);
+    } catch (e) {
+      // Fail silently if the userId is not matched.
+    }
+
+    // TODO: add  'seen' criteria to the notification
+    // to check if the user has opened the notification.
     const notification = Notifications.findOne({userId: currentUserId});
     return (notification) ? notification : false;
   },
@@ -350,12 +360,7 @@ Meteor.methods({
     };
     check(notification, Schemas.Notifications);
     // Insert new order into the notifications database.
-    Notifications.insert(notification, (err) => {
-      if (err) {
-        console.log("~~~~~~ Error::::::::", err);
-      }
-      console.log("Here!");
-    });
+    Notifications.insert(notification);
 
     // Get Shop information
     const shop = Shops.findOne(order.shopId);
