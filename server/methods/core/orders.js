@@ -6,7 +6,7 @@ import Future from "fibers/future";
 import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
 import { getSlug } from "/lib/api";
-import { Cart, Media, Orders, Products, Shops } from "/lib/collections";
+import { Cart, Media, Orders, Products, Shops, Notifications } from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction } from "/server/api";
 
@@ -316,11 +316,20 @@ Meteor.methods({
   },
 
   /**
+   * Get user notifications
+   */
+
+  "notifications/getNotifications": function (currentUserId) {
+    const notification = Notifications.findOne({userId: currentUserId});
+    return (notification) ? notification : false;
+  },
+
+  /**
    * orders/sendNotification
    *
-   * @summary send order notification email
+   * @summary send order notification email and SMS
    * @param {Object} order - order object
-   * @return {Boolean} email sent or not
+   * @return {Boolean} email/SMS sent or not
    */
   "orders/sendNotification": function (order) {
     check(order, Object);
@@ -331,6 +340,22 @@ Meteor.methods({
     }
 
     this.unblock();
+
+    // Update the notification database
+    const notification = {
+      userId: Meteor.userId(),
+      name: "Order Created",
+      type: "new",
+      message: "Order creation successful!"
+    };
+    check(notification, Schemas.Notifications);
+    // Insert new order into the notifications database.
+    Notifications.insert(notification, (err) => {
+      if (err) {
+        console.log("~~~~~~ Error::::::::", err);
+      }
+      console.log("Here!");
+    });
 
     // Get Shop information
     const shop = Shops.findOne(order.shopId);
@@ -434,7 +459,7 @@ Meteor.methods({
     Reaction.Email.send({
       to: order.email,
       from: `${shop.name} <${shop.emails[0].address}>`,
-      subject: `Your order is confirmed`,
+      subject: "Your order is confirmed",
       // subject: `Order update from ${shop.name}`,
       html: SSR.render(tpl,  dataForOrderEmail)
     });

@@ -1,3 +1,4 @@
+import { Meteor } from "meteor/meteor";
 import { FlatButton } from "/imports/plugins/core/ui/client/components";
 import { Reaction } from "/client/api";
 import { Tags } from "/lib/collections";
@@ -46,6 +47,7 @@ Template.CoreNavigationBar.helpers({
     // it defaults to false if none is set.
     const state = (notification) ? notification : false;
     const bell = (state) ? "fa fa-bell" : "fa fa-bell-o";
+    console.log(Meteor.userId());
     return {
       component: FlatButton,
       icon: bell,
