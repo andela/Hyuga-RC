@@ -40,6 +40,22 @@ Template.CoreNavigationBar.helpers({
       // }
     };
   },
+  NotificationButtonComponent(states) {
+    const state = false;
+    console.log(state);
+    const bell = (state) ? "fa fa-bell" : "fa fa-bell-o";
+    return {
+      component: FlatButton,
+      icon: bell,
+      kind: "flat"
+      // onClick() {
+      //   Blaze.renderWithData(Template.searchModal, {
+      //   }, $("body").get(0));
+      //   $("body").css("overflow-y", "hidden");
+      //   $("#search-input").focus();
+      // }
+    };
+  },
   onMenuButtonClick() {
     const instance = Template.instance();
     return () => {
