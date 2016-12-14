@@ -1,5 +1,82 @@
 <template name="wallet">
-  <div class="container-fluid-sm">
-    
+  <div class="flex flex-column flex-align-center flex-2x container-lg">
+
+    <div class="flex-item">
+      <div class="panel panel-lg">
+        <div class="panel-heading">
+          <h3 class="panel-title">Your Balance</h3>
+        </div>
+        <div class="panel-content">
+          <span style="font-weight: bolder; font-size: 4.2em">$10,000.59</span>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="flex-item">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Top Up</h3>
+        </div>
+
+        <div class="panel-content">
+          <input id="topUpAmount" style="margin-top: 5px; margin-bottom: 5px; margin-left: 130px; width: 200px" class="form-control"
+            type="number" name="amount" placeholder="Amount">
+          <button style="margin-top: 5px; margin-bottom: 5px; position: relative; left: 190px;" id="top-up-btn" class="btn btn-success">Top Up</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-item">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Tansfer</h3>
+        </div>
+
+        <div class="panel-content">
+          <div class="col-xs-6">
+            <input id="topUpAmount" style="margin-top: 5px; margin-bottom: 5px;" class="form-control" type="number" name="amount" placeholder="Amount">
+          </div>
+          <div class="col-xs-6">
+            <input id="topUpAmount" style="margin-top: 5px; margin-bottom: 5px;" class="form-control" type="text" name="amount" placeholder="Beneficiary Email">
+          </div>
+          <button style="margin-top: 5px; margin-bottom: 5px; position: relative; left: 190px;" id="top-up-btn" class="btn btn-success">Transfer</button>
+        </div>
+      </div>
+    </div>
+
+  <div class="col-sm-10" id="transactions">
+    <div class="row">
+      <h2>Transactions</h2>
+
+      <table class="table table-striped">
+        <thead>
+          <th>Transaction Type</th>
+          <th>Amount</th>
+          <th>Date and Time</th>
+        </thead>
+        <tbody>
+          {{#each transaction in getTransactions }}
+          <tr>
+            <td>{{capitalizeFirstLetter transaction.transactionType}}</td>
+            <td>{{formatPrice transaction.amount}}</td>
+            <td>{{formatDate transaction.createdAt}}</td>
+          </tr>
+          {{/each}}
+          <tr>
+            <td>Credit</td>
+            <td>$2000</td>
+            <td>Wed Dec 14 2016 09:24:42 GMT+0100 (WAT)</td>
+          </tr>
+          <tr>
+            <td>Debit</td>
+            <td>$1500</td>
+            <td>Wed Dec 14 2016 10:24:42 GMT+0100 (WAT)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
   </div>
 </template>
