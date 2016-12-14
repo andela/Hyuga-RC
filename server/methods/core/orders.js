@@ -178,6 +178,21 @@ Meteor.methods({
   },
 
   /**
+   * orders/cancelOrder
+   *
+   * @summary Cancel an Order
+   * @param {Object} order - order object
+   * @return {Object} return update result
+   */
+  "orders/cancelOrder"(order) {
+    check(order, Object);
+
+    return Orders.update(order._id, {
+      $set: { "workflow.status": "canceled" }
+    });
+  },
+
+  /**
    * orders/processPayment
    *
    * @summary trigger processPayment and workflow update
