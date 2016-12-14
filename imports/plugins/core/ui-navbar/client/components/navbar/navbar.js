@@ -40,9 +40,11 @@ Template.CoreNavigationBar.helpers({
       // }
     };
   },
-  NotificationButtonComponent(states) {
-    const state = false;
-    console.log(state);
+  NotificationButtonComponent(notification) {
+    // Set the state of the notification Icon based
+    // on the notification argumant passed in from the view
+    // it defaults to false if none is set.
+    const state = (notification) ? notification : false;
     const bell = (state) ? "fa fa-bell" : "fa fa-bell-o";
     return {
       component: FlatButton,
