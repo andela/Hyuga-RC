@@ -14,5 +14,21 @@ Template.wallet.events({
         Alerts.toast("An error occured, please try again", "error");
       }
     });
+  },
+
+  "submit #transfer": (event) => {
+    event.preventDefault();
+    const amount = parseInt(document.getElementById("transferAmount").value, 10);
+    const to = document.getElementById("recipient").value;
+    const transaction = {amount, to, date: new Date()};
+    Meteor.call("wallet/transaction", Meteor.userId(), transaction, "payment", (err, res) => {
+      if (res === 2) {
+        Alerts.toast(`No user with email ${to}`, "error");
+      } else if (res === 1) {
+        Alerts.toast("The transfer was successful", "success");
+      } else {
+        Alerts.toast("An error occured, please try again", "error");
+      }
+    });
   }
 });

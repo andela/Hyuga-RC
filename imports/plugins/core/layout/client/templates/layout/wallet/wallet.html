@@ -35,13 +35,15 @@
         </div>
 
         <div class="panel-content">
-          <div class="col-xs-6">
-            <input id="topUpAmount" style="margin-top: 5px; margin-bottom: 5px;" class="form-control" type="number" name="amount" placeholder="Amount">
-          </div>
-          <div class="col-xs-6">
-            <input id="topUpAmount" style="margin-top: 5px; margin-bottom: 5px;" class="form-control" type="text" name="amount" placeholder="Beneficiary Email">
-          </div>
-          <button style="margin-top: 5px; margin-bottom: 5px; position: relative; left: 190px;" id="top-up-btn" class="btn btn-success">Transfer</button>
+          <form id="transfer">
+            <div class="col-xs-6">
+              <input id="transferAmount" style="margin-top: 5px; margin-bottom: 5px;" class="form-control" type="number" name="amount" placeholder="Amount">
+            </div>
+            <div class="col-xs-6">
+              <input id="recipient" style="margin-top: 5px; margin-bottom: 5px;" class="form-control" type="text" name="amount" placeholder="Beneficiary Email">
+            </div>
+            <button type="submit" style="margin-top: 5px; margin-bottom: 5px; position: relative; left: 190px;" class="btn btn-success">Transfer</button>
+          </form>
         </div>
       </div>
     </div>

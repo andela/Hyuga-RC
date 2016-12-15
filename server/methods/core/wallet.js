@@ -15,28 +15,42 @@ Meteor.methods({
   "wallet/transaction": (userId, transaction, type) => {
     check(userId, String);
     check(type, String);
-    check(transaction, Schemas.Deposits);
     let pushOptions, balanceOptions;
     const {amount, date} = transaction;
     const basicInfo = {amount, date};
     if (type === "deposit") {
-      basicInfo.referenceId = transaction.referenceId;
+      check(transaction, Schemas.Deposits);
+      if (transaction.referenceId) {
+        basicInfo.referenceId = transaction.referenceId;
+      }
+      if (transaction.from) {
+        basicInfo.from = transaction.from;
+      }
       pushOptions = {deposits: basicInfo};
       balanceOptions = {balance: amount};
     }
     if (type === "payment") {
-      pushOptions = {payment: {amount: transaction.amount, orderId: transaction.orderId}};
-    }
-
-    if (type === "transfer") {
-      pushOptions = {transfers: {amount: transaction.amount, recipient: transaction.recipient}};
+      check(transaction, Schemas.Withdrawals);
+      basicInfo.orderId = transaction.orderId;
+      if (transaction.to) {
+        const recipient = Collections.Accounts.findOne({"emails.0.address": transaction.to});
+        const sender = Collections.Accounts.findOne(userId);
+        if (!recipient) {
+          return 2;
+        }
+        // deposit for the recipient
+        Meteor.call("wallet/transaction", recipient._id, {amount, from: sender.emails[0].address, date: new Date()}, "deposit");
+        basicInfo.to = transaction.to;
+      }
+      pushOptions = {withdrawals: basicInfo};
+      balanceOptions = {balance: -amount};
     }
 
     try {
       Collections.Wallet.update({userId}, {$push: pushOptions, $inc: balanceOptions}, {upsert: true});
-      return true;
+      return 1;
     } catch (error) {
-      return false;
+      return 0;
     }
   },
 
