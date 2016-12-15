@@ -9,7 +9,7 @@ import { i18next } from "/client/api";
  */
 Template.dashboardOrdersList.helpers({
   orderStatus() {
-    if (this.workflow.status === "coreOrderCompleted") {
+    if (this.workflow.status === "coreOrderWorkflow/completed") {
       return i18next.t("order.completed");
     } else if (this.workflow.status === "canceled") {
       return "Canceled";
