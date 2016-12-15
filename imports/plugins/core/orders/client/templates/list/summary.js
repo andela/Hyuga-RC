@@ -32,6 +32,10 @@ Template.ordersListSummary.helpers({
       format: currencyFormat,
       isEditing: false
     };
+  },
+
+  showCancelButton() {
+    return this.order.workflow.status !== "canceled";
   }
 });
 
@@ -45,7 +49,7 @@ Template.ordersListSummary.events({
    * @param  {Template} instance - Blaze Template
    * @return {void}
    */
-  "submit form[name=cancel]"(event, instance) {
+  "click button[name=cancel]"(event, instance) {
     event.preventDefault();
 
     const state = instance.state;

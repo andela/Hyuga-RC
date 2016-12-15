@@ -62,9 +62,10 @@
         {{/each}}
       </div>
     </div>
-    <form class="cancel-order" name="cancel">
-      <button class="btn btn-danger flex-item-fill" type="submit" data-event-action="cancelOrder" data-i18n="order.cancelOrder">Cancel Order</button>
-    </form>
+
+   {{#if showCancelButton}}
+    <button name="cancel" class="btn btn-sm btn-danger flex-item-fill" type="submit" data-event-action="cancelOrder" data-i18n="order.cancelOrder">Cancel Order</button>
+    {{/if}}
 
   </div>
 </template>
