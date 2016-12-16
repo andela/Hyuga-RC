@@ -7,7 +7,7 @@
           <h3 class="panel-title">Your Balance</h3>
         </div>
         <div class="panel-content">
-          <span style="font-weight: bolder; font-size: 4.2em">$10,000.59</span>
+          <span style="font-weight: bolder; font-size: 4.2em">₦{{formatCurrency balance}}</span>
         </div>
 
       </div>
@@ -21,9 +21,16 @@
         </div>
 
         <div class="panel-content">
-          <input id="depositAmount" style="margin-top: 5px; margin-bottom: 5px; margin-left: 130px; width: 200px" class="form-control"
-            type="number" name="amount" placeholder="Amount">
-          <button style="margin-top: 5px; margin-bottom: 5px; position: relative; left: 190px;" id="deposit" class="btn btn-success">Deposit</button>
+          <form id="deposit">
+            <div class="row form-group col-md-6 col-md-offset-3">
+              <input id="depositAmount" class="form-control" type="number" placeholder="Amount">
+            </div>
+            <button type="submit" class="row col-md-2 col-md-offset-5 btn btn-success">Deposit</button>
+          </form>
+          
+          <!--<input id="depositAmount" style="margin-top: 5px; margin-bottom: 5px;" class="col-md-4 form-control"
+            type="number" name="amount" placeholder="Amount"/>
+          <button style="margin-top: 5px; margin-bottom: 5px;" class="col-md-3 btn btn-success">Deposit</button>-->
         </div>
       </div>
     </div>
@@ -37,12 +44,12 @@
         <div class="panel-content">
           <form id="transfer">
             <div class="col-xs-6">
-              <input id="transferAmount" style="margin-top: 5px; margin-bottom: 5px;" class="form-control" type="number" name="amount" placeholder="Amount">
+              <input id="transferAmount" class="form-control" type="number" name="amount" placeholder="Amount">
             </div>
             <div class="col-xs-6">
-              <input id="recipient" style="margin-top: 5px; margin-bottom: 5px;" class="form-control" type="text" name="amount" placeholder="Beneficiary Email">
+              <input id="recipient" class="form-control" type="text" name="amount" placeholder="Beneficiary Email">
             </div>
-            <button type="submit" style="margin-top: 5px; margin-bottom: 5px; position: relative; left: 190px;" class="btn btn-success">Transfer</button>
+            <button type="submit" class="btn btn-success col-md-2 col-md-offset-5" style="margin-top:15px">Transfer</button>
           </form>
         </div>
       </div>
@@ -56,26 +63,22 @@
         <thead>
           <th>Transaction Type</th>
           <th>Amount</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Order Id</th>
           <th>Date and Time</th>
         </thead>
         <tbody>
           {{#each transaction in getTransactions }}
           <tr>
-            <td>{{capitalizeFirstLetter transaction.transactionType}}</td>
-            <td>{{formatPrice transaction.amount}}</td>
-            <td>{{formatDate transaction.createdAt}}</td>
+            <td>{{transaction.transactionType}}</td>
+            <td>{{formatCurrency transaction.amount}}</td>
+            <td>{{transaction.from}}</td>
+            <td>{{transaction.to}}</td>
+            <td>{{transaction.orderId}}</td>
+            <td>{{transaction.date}}</td>
           </tr>
           {{/each}}
-          <tr>
-            <td>Credit</td>
-            <td>$2000</td>
-            <td>Wed Dec 14 2016 09:24:42 GMT+0100 (WAT)</td>
-          </tr>
-          <tr>
-            <td>Debit</td>
-            <td>$1500</td>
-            <td>Wed Dec 14 2016 10:24:42 GMT+0100 (WAT)</td>
-          </tr>
         </tbody>
       </table>
     </div>
