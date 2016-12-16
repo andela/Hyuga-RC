@@ -17,10 +17,10 @@ Meteor.methods({
     check(transactions, Schemas.Transaction);
     let balanceOptions;
     const {amount, transactionType} = transactions;
-    if (transactionType === "Debit") {
+    if (transactionType === "Credit") {
       balanceOptions = {balance: amount};
     }
-    if (transactionType === "Credit") {
+    if (transactionType === "Debit") {
       if (transactions.to) {
         const recipient = Accounts.findOne({"emails.0.address": transactions.to});
         const sender = Accounts.findOne(userId);
@@ -32,7 +32,7 @@ Meteor.methods({
           amount,
           from: sender.emails[0].address,
           date: new Date(),
-          transactionType: "Debit"
+          transactionType: "Credit"
         });
       }
       balanceOptions = {balance: -amount};
