@@ -23,7 +23,10 @@
         <div class="panel-content">
           <input id="depositAmount" style="margin-top: 5px; margin-bottom: 5px; margin-left: 130px; width: 200px" class="form-control"
             type="number" name="amount" placeholder="Amount">
-          <button style="margin-top: 5px; margin-bottom: 5px; position: relative; left: 190px;" id="deposit" class="btn btn-success">Deposit</button>
+          <form>
+            <script src="https://js.paystack.co/v1/inline.js"></script>
+            <button style="margin-top: 5px; margin-bottom: 5px; position: relative; left: 190px;" id="deposit" class="btn btn-success">Deposit</button>
+          </form>
         </div>
       </div>
     </div>
@@ -46,37 +49,37 @@
       </div>
     </div>
 
-  <div class="col-sm-10" id="transactions">
-    <div class="row">
-      <h2>Transactions</h2>
+    <div class="col-sm-10" id="transactions">
+      <div class="row">
+        <h2>Transactions</h2>
 
-      <table class="table table-striped">
-        <thead>
-          <th>Transaction Type</th>
-          <th>Amount</th>
-          <th>Date and Time</th>
-        </thead>
-        <tbody>
-          {{#each transaction in getTransactions }}
-          <tr>
-            <td>{{capitalizeFirstLetter transaction.transactionType}}</td>
-            <td>{{formatPrice transaction.amount}}</td>
-            <td>{{formatDate transaction.createdAt}}</td>
-          </tr>
-          {{/each}}
-          <tr>
-            <td>Credit</td>
-            <td>$2000</td>
-            <td>Wed Dec 14 2016 09:24:42 GMT+0100 (WAT)</td>
-          </tr>
-          <tr>
-            <td>Debit</td>
-            <td>$1500</td>
-            <td>Wed Dec 14 2016 10:24:42 GMT+0100 (WAT)</td>
-          </tr>
-        </tbody>
-      </table>
+        <table class="table table-striped">
+          <thead>
+            <th>Transaction Type</th>
+            <th>Amount</th>
+            <th>Date and Time</th>
+          </thead>
+          <tbody>
+            {{#each transaction in getTransactions }}
+            <tr>
+              <td>{{capitalizeFirstLetter transaction.transactionType}}</td>
+              <td>{{formatPrice transaction.amount}}</td>
+              <td>{{formatDate transaction.createdAt}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+              <td>Credit</td>
+              <td>$2000</td>
+              <td>Wed Dec 14 2016 09:24:42 GMT+0100 (WAT)</td>
+            </tr>
+            <tr>
+              <td>Debit</td>
+              <td>$1500</td>
+              <td>Wed Dec 14 2016 10:24:42 GMT+0100 (WAT)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
   </div>
 </template>
