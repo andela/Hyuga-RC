@@ -54,20 +54,24 @@ Template.CoreNavigationBar.helpers({
   NotificationButtonComponent() {
     // Check if the user has pending notifications
     // and set the appropriate Icon
-    let bell = (Template.instance().notification.get())
+    const bell = (Template.instance().notification.get())
     ? "fa fa-bell"
     : "fa fa-bell-o";
+    $(".notificationsList").hide();
     return {
       component: FlatButton,
       icon: bell,
-      kind: "flat"
-      // onClick() {
-      //   Blaze.renderWithData(Template.searchModal, {
-      //   }, $("body").get(0));
-      //   $("body").css("overflow-y", "hidden");
-      //   $("#search-input").focus();
-      // }
+      kind: "flat",
+      onClick() {
+        // Change the display state of the notification to show the latest notification when clicked
+        Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
+          return (res) ? $(".notificationsList").html(`${res.message}`).toggle(200) : false;
+        });
+      }
     };
+  },
+  onNotificationClick() {
+
   },
   onMenuButtonClick() {
     const instance = Template.instance();

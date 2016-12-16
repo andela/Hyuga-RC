@@ -351,7 +351,7 @@ Meteor.methods({
 
     this.unblock();
 
-    // Update the notification database
+    // Update the notification collection
     const notification = {
       userId: Meteor.userId(),
       name: "Order Created",
