@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { Template } from "meteor/templating";
+import { Wallet } from "/lib/collections";
 
 Template.wallet.events({
   "submit #deposit": (event) => {
@@ -39,22 +40,17 @@ Template.wallet.onCreated(function () {
   this.state = new ReactiveDict();
   this.autorun(() => {
     this.state.setDefault({
-      balance: 0,
-      transactions: []
+      details: {balance: 0, transactions: []}
     });
-    const instance = this;
-    Meteor.call("wallet/getTransaction", Meteor.userId(), (err, res) => {
-      if (res) {
-        instance.state.set("balance", res.balance);
-        instance.state.set("transactions", res.transactions);
-      }
-    });
+    this.subscribe("transactionDetails", Meteor.userId());
+    const transactionInfo = Wallet.find().fetch();
+    this.state.set("details", transactionInfo[0]);
   });
 });
 
 Template.wallet.helpers({
   balance: () => {
-    return Template.instance().state.get("balance");
+    return Template.instance().state.get("details").balance;
   },
 
   formatCurrency: (number) => {
@@ -62,6 +58,15 @@ Template.wallet.helpers({
   },
 
   getTransactions: () => {
-    return Template.instance().state.get("transactions");
+    return Template.instance().state.get("details").transactions;
   }
+
+  // updateTransactions: () => {
+  //   Meteor.call("wallet/getTransaction", Meteor.userId(), (err, res) => {
+  //     if (res) {
+  //       Template.instance().state.set("balance", res.balance);
+  //       Template.instance().state.set("transactions", res.transactions);
+  //     }
+  //   });
+// }
 });

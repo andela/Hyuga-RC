@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
-import * as Collections from "/lib/collections";
+import { Wallet, Accounts } from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
-import { check, Match } from "meteor/check";
+import { check } from "meteor/check";
 
 Meteor.methods({
 
@@ -22,8 +22,8 @@ Meteor.methods({
     }
     if (transactionType === "Credit") {
       if (transactions.to) {
-        const recipient = Collections.Accounts.findOne({"emails.0.address": transactions.to});
-        const sender = Collections.Accounts.findOne(userId);
+        const recipient = Accounts.findOne({"emails.0.address": transactions.to});
+        const sender = Accounts.findOne(userId);
         if (!recipient) {
           return 2;
         }
@@ -39,7 +39,7 @@ Meteor.methods({
     }
 
     try {
-      Collections.Wallet.update({userId}, {$push: {transactions: transactions}, $inc: balanceOptions}, {upsert: true});
+      Wallet.update({userId}, {$push: {transactions: transactions}, $inc: balanceOptions}, {upsert: true});
       return 1;
     } catch (error) {
       return 0;
@@ -55,10 +55,11 @@ Meteor.methods({
    */
   "wallet/getTransaction": (userId) => {
     check(userId, String);
-    return Collections.Wallet.findOne({userId});
+    return Wallet.findOne({userId});
   }
 });
 
-// Meteor.publish("transactionDetails", () => {
-//   return Collections.findOne({userId: this.userId});
-// });
+Meteor.publish("transactionDetails", (userId) => {
+  check(userId, String);
+  return Wallet.find({userId});
+});
