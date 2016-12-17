@@ -50,20 +50,16 @@ Meteor.methods({
    * wallet/refund method to return fund when an order is canceled
    * @param {string} userId the id of the logged in user
    * @param {string} orderid, the order reference id
-   * @param {int} amount optional - the amount to refund
+   * @param {int} amount the amount to refund
    * @return {boolean} true if the refund was successful
    */
-  "wallet/refund": (userId, orderId) => {
+  "wallet/refund": (userId, orderId, amount) => {
     check(userId, String);
     check(orderId, String);
-    const transactionDetails = Wallet.findOne({userId});
-    const orderInfo = transactionDetails.transactions.filter((each) => {
-      if (each.orderId === orderId) {
-        return true;
-      }
-    });
+    check(amount, Number);
+    const transaction = {amount, orderId, transactionType: "Refund"};
     try {
-      Wallet.update({userId}, {$pull: {transactions: {orderId}}, $inc: {balance: orderInfo[0].amount}});
+      Wallet.update({userId}, {$push: {transactions: transaction}, $inc: {balance: amount}}, {upsert: true});
       return true;
     } catch (error) {
       return false;

@@ -36,15 +36,6 @@ Template.wallet.events({
         Alerts.toast("An error occured, please try again", "error");
       }
     });
-  },
-
-  "click #pay": (event) => {
-    event.preventDefault();
-    // const transaction = {amount: 200, orderId: "49fk89389nf33448", date: new Date(), transactionType: "Debit"};
-    // Meteor.call("wallet/transaction", Meteor.userId(), transaction);
-    Meteor.call("wallet/refund", Meteor.userId(), "49fk89389nf33448", (err, res) => {
-      console.log(err, res);
-    });
   }
 });
 
