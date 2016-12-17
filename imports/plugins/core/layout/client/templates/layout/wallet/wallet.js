@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { Template } from "meteor/templating";
-import { Wallet, Accounts } from "/lib/collections";
+import { Wallet, Accounts, Shops } from "/lib/collections";
 
 Template.wallet.events({
   "submit #deposit": (event) => {
@@ -54,10 +54,6 @@ Template.wallet.onCreated(function () {
 Template.wallet.helpers({
   balance: () => {
     return Template.instance().state.get("details").balance;
-  },
-
-  formatCurrency: (number) => {
-    return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
   },
 
   getTransactions: () => {
