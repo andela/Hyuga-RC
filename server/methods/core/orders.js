@@ -9,6 +9,8 @@ import { getSlug } from "/lib/api";
 import { Cart, Media, Orders, Products, Shops, Notifications } from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction } from "/server/api";
+const Jusibe = require("jusibe");
+const jusibe = new Jusibe("0c20d915e92b2718e50be245d350db64", "112e8722137c75496b93b7ce80713a68");
 
 /**
  * Reaction Order Methods
@@ -362,9 +364,47 @@ Meteor.methods({
     // Insert new order into the notifications database.
     Notifications.insert(notification);
 
+    // Send SMS to the buyers phone using the billing address number.
+    const buyerPhoneNumber = order.billing[0].address.phone;
+    jusibe.getCredits((req, res) => {
+      if (res.statusCode !== 200) {
+        Logger.error(`No SMS credit remaining: error code: ${res.statusCode}`);
+      }
+      const buyerMsgContent = {
+        to: buyerPhoneNumber,
+        from: "Reaction",
+        message: `Your order for ${order.items[0].title} has been received and is now being processed. Thanks for your patronage`
+      };
+      jusibe.sendSMS(buyerMsgContent, (err, result) => {
+        if (result.statusCode !== 200) {
+          Logger.info("SMS not sent to buyer!");
+        }
+        Logger.info("SMS notification sent to buyer!");
+      });
+    });
+
     // Get Shop information
     const shop = Shops.findOne(order.shopId);
     const shopContact = shop.addressBook[0];
+
+    // Send SMS to the vendor
+    const vendorPhoneNumber = (shop.name === "REACTION") ? shopContact.phone : shop.shopdetails.shopPhone;
+    jusibe.getCredits((req, res) => {
+      if (res.statusCode !== 200) {
+        Logger.error(`No SMS credit remaining: error code: ${res.statusCode}`);
+      }
+      const vendorMsgContent = {
+        to: vendorPhoneNumber,
+        from: "New Order",
+        message: `An order has been placed for ${order.items[0].title}, visit your reaction commerce dashboard to view and process orders.`
+      };
+      jusibe.sendSMS(vendorMsgContent, (err, result) => {
+        if (result.statusCode !== 200) {
+          Logger.info("SMS not sent to vendor!");
+        }
+        Logger.info("New order notification sent to vendor!");
+      });
+    });
 
     // Get shop logo, if available
     let emailLogo;
