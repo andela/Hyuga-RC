@@ -47,15 +47,27 @@ Meteor.methods({
   },
 
   /**
-   * wallet/deposit method to deposit money into user's account
-   * @param {string} userId, the id of the user
-   * @param {object} transaction, details of the transaction
-   * @param {string} type, type of transaction done
-   * @return {boolean} true or false if the db operation was successful
+   * wallet/refund method to return fund when an order is canceled
+   * @param {string} userId the id of the logged in user
+   * @param {string} orderid, the order reference id
+   * @param {int} amount optional - the amount to refund
+   * @return {boolean} true if the refund was successful
    */
-  "wallet/getTransaction": (userId) => {
+  "wallet/refund": (userId, orderId) => {
     check(userId, String);
-    return Wallet.findOne({userId});
+    check(orderId, String);
+    const transactionDetails = Wallet.findOne({userId});
+    const orderInfo = transactionDetails.transactions.filter((each) => {
+      if (each.orderId === orderId) {
+        return true;
+      }
+    });
+    try {
+      Wallet.update({userId}, {$pull: {transactions: {orderId}}, $inc: {balance: orderInfo[0].amount}});
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 });
 

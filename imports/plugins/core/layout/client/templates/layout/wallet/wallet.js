@@ -19,6 +19,10 @@ Template.wallet.events({
   "submit #transfer": (event) => {
     event.preventDefault();
     const amount = parseInt(document.getElementById("transferAmount").value, 10);
+    if (amount > Template.instance().state.get("details").balance) {
+      Alerts.toast("Insufficient Balance", "error");
+      return false;
+    }
     const to = document.getElementById("recipient").value;
     const transaction = {amount, to, date: new Date(), transactionType: "Debit"};
     Meteor.call("wallet/transaction", Meteor.userId(), transaction, (err, res) => {
@@ -31,6 +35,15 @@ Template.wallet.events({
       } else {
         Alerts.toast("An error occured, please try again", "error");
       }
+    });
+  },
+
+  "click #pay": (event) => {
+    event.preventDefault();
+    // const transaction = {amount: 200, orderId: "49fk89389nf33448", date: new Date(), transactionType: "Debit"};
+    // Meteor.call("wallet/transaction", Meteor.userId(), transaction);
+    Meteor.call("wallet/refund", Meteor.userId(), "49fk89389nf33448", (err, res) => {
+      console.log(err, res);
     });
   }
 });
