@@ -5,9 +5,14 @@
     </div>
     <div class="panel-body">
       <form name="cancelOrderForm">
-        <div class="form-group">
+        <div class="form-group {{hasError messages.errors.comment}}">
           <label>Reason</label>
-          <textarea name="body" class="form-control"></textarea>
+          <textarea name="comment" class="form-control input-comment"></textarea>
+          {{#if hasError messages.errors.comment}}
+            <span class="help-block">
+              {{messages.errors.comment.reason}}
+            </span>
+          {{/if}}
         </div>
 
         <hr>
