@@ -373,22 +373,24 @@ Meteor.methods({
       const buyerMsgContent = {
         to: buyerPhoneNumber,
         from: "Reaction",
-        message: `Your order for ${order.items[0].title} has been received and is now being processed. Thanks for your patronage`
+        message: `Your order for ${order.items[0].title} has been received and is now being processed. Thanks for your patronage.`
       };
       jusibe.sendSMS(buyerMsgContent, (err, result) => {
         if (result.statusCode !== 200) {
-          Logger.info("SMS not sent to buyer!");
+          Logger.warn("SMS not sent to buyer!");
         }
-        Logger.info("SMS notification sent to buyer!");
+        Logger.info("SMS notification sent to buyer");
       });
     });
 
     // Get Shop information
     const shop = Shops.findOne(order.shopId);
+    const vendorShop = Shops.findOne(order.items[0].shopId);
     const shopContact = shop.addressBook[0];
+    const vendorAddress = vendorShop.shopDetails;
 
     // Send SMS to the vendor
-    const vendorPhoneNumber = (shop.name === "REACTION") ? shopContact.phone : shop.shopdetails.shopPhone;
+    const vendorPhoneNumber = (vendorShop.name === "REACTION") ? shopContact.phone : vendorAddress.shopPhone;
     jusibe.getCredits((req, res) => {
       if (res.statusCode !== 200) {
         Logger.error(`No SMS credit remaining: error code: ${res.statusCode}`);
@@ -400,9 +402,9 @@ Meteor.methods({
       };
       jusibe.sendSMS(vendorMsgContent, (err, result) => {
         if (result.statusCode !== 200) {
-          Logger.info("SMS not sent to vendor!");
+          Logger.warn("SMS not sent to vendor");
         }
-        Logger.info("New order notification sent to vendor!");
+        Logger.info("New order notification sent to vendor");
       });
     });
 
