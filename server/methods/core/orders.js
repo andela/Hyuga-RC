@@ -364,49 +364,57 @@ Meteor.methods({
     // Insert new order into the notifications database.
     Notifications.insert(notification);
 
+    // Get the total number of items ordered and send notifications for each item.
+    const numberOfItems = order.items.length;
+
     // Send SMS to the buyers phone using the billing address number.
     const buyerPhoneNumber = order.billing[0].address.phone;
-    jusibe.getCredits((req, res) => {
-      if (res.statusCode !== 200) {
-        Logger.error(`No SMS credit remaining: error code: ${res.statusCode}`);
-      }
-      const buyerMsgContent = {
-        to: buyerPhoneNumber,
-        from: "Reaction",
-        message: `Your order for ${order.items[0].title} has been received and is now being processed. Thanks for your patronage.`
-      };
-      jusibe.sendSMS(buyerMsgContent, (err, result) => {
-        if (result.statusCode !== 200) {
-          Logger.warn("SMS not sent to buyer!");
-        }
-        Logger.info("SMS notification sent to buyer");
-      });
-    });
-
-    // Get Shop information
     const shop = Shops.findOne(order.shopId);
-    const vendorShop = Shops.findOne(order.items[0].shopId);
     const shopContact = shop.addressBook[0];
-    const vendorAddress = vendorShop.shopDetails;
 
-    // Send SMS to the vendor
-    const vendorPhoneNumber = (vendorShop.name === "REACTION") ? shopContact.phone : vendorAddress.shopPhone;
-    jusibe.getCredits((req, res) => {
-      if (res.statusCode !== 200) {
-        Logger.error(`No SMS credit remaining: error code: ${res.statusCode}`);
-      }
-      const vendorMsgContent = {
-        to: vendorPhoneNumber,
-        from: "New Order",
-        message: `An order has been placed for ${order.items[0].title}, visit your reaction commerce dashboard to view and process orders.`
-      };
-      jusibe.sendSMS(vendorMsgContent, (err, result) => {
-        if (result.statusCode !== 200) {
-          Logger.warn("SMS not sent to vendor");
+    // Use a loop to send to all vendors and buyers for all products.
+    // TODO: concatenate all products so that a single message can be sent to the buyer containing all the products he bought.
+    for (let i = 0; i < numberOfItems; i += 1) {
+      jusibe.getCredits((req, res) => {
+        if (res.statusCode !== 200) {
+          Logger.error(`No SMS credit remaining: error code: ${res.statusCode}`);
         }
-        Logger.info("New order notification sent to vendor");
+        const buyerMsgContent = {
+          to: buyerPhoneNumber,
+          from: "Reaction",
+          message: `Your order for ${order.items[i].title} has been received and is now being processed. Thanks for your patronage.`
+        };
+        jusibe.sendSMS(buyerMsgContent, (err, result) => {
+          if (result.statusCode !== 200) {
+            Logger.warn("SMS not sent to buyer!");
+          }
+          Logger.info("SMS notification sent to buyer");
+        });
       });
-    });
+
+      // Get Shop information
+      const vendorShop = Shops.findOne(order.items[i].shopId);
+      const vendorAddress = vendorShop.shopDetails;
+
+      // Send SMS to the vendor
+      const vendorPhoneNumber = (vendorShop.name === "REACTION") ? shopContact.phone : vendorAddress.shopPhone;
+      jusibe.getCredits((req, res) => {
+        if (res.statusCode !== 200) {
+          Logger.error(`No SMS credit remaining: error code: ${res.statusCode}`);
+        }
+        const vendorMsgContent = {
+          to: vendorPhoneNumber,
+          from: "New Order",
+          message: `An order has been placed for ${order.items[i].title}, visit your reaction commerce dashboard to view and process orders.`
+        };
+        jusibe.sendSMS(vendorMsgContent, (err, result) => {
+          if (result.statusCode !== 200) {
+            Logger.warn("SMS not sent to vendor");
+          }
+          Logger.info("New order notification sent to vendor");
+        });
+      });
+    }
 
     // Get shop logo, if available
     let emailLogo;
