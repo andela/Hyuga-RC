@@ -73,14 +73,5 @@ Template.coreOrderWorkflow.helpers({
       return this.status;
     }
     return false;
-  },
-
-  /**
-   * notCanceled
-   * @returns {Boolean} true or false
-   */
-  notCanceled() {
-    const order = Template.parentData(1);
-    return order.workflow.status !== "canceled";
   }
 });

@@ -3,6 +3,7 @@
     <div class="panel-heading">
       <h3 class="panel-title">Cancel Order</h3>
     </div>
+    {{#if showCancelOrderForm}}
     <div class="panel-body">
       <form name="cancelOrderForm">
         <div class="form-group {{hasError messages.errors.comment}}">
@@ -22,5 +23,6 @@
         </div>
       </form>
     </div>
+    {{/if}}
   </div>
 </template>

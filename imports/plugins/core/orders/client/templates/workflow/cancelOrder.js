@@ -19,12 +19,17 @@ const validateComment = (comment) => {
 Template.coreOrderCancelOrder.onCreated(function () {
   const template = Template.instance();
 
+  template.showCancelOrderForm = ReactiveVar(true);
   this.state = new ReactiveDict();
   template.formMessages = new ReactiveVar({});
 
   this.autorun(() => {
     const currentData = Template.currentData();
     const order = currentData.order;
+
+    if (order.workflow.status === "canceled") {
+      template.showCancelOrderForm = ReactiveVar(false);
+    }
 
     this.state.set("order", order);
   });
@@ -72,8 +77,8 @@ Template.coreOrderCancelOrder.events({
     }, (isConfirm) => {
       if (isConfirm) {
         Meteor.call("orders/vendorCancelOrder", order, newComment, (error) => {
-          if (error) {
-            Logger.warn(error);
+          if (!error) {
+            template.showCancelOrderForm.set(false);
           }
         });
       }
@@ -82,6 +87,11 @@ Template.coreOrderCancelOrder.events({
 });
 
 Template.coreOrderCancelOrder.helpers({
+  showCancelOrderForm() {
+    const template = Template.instance();
+    return template.showCancelOrderForm.get();
+  },
+
   messages() {
     return Template.instance().formMessages.get();
   },
