@@ -51,7 +51,7 @@ Template.ordersListSummary.events({
    * @return {void}
    */
   "click button[name=cancel]"(event, instance) {
-    event.preventDefault();
+    event.stopPropagation();
 
     const state = instance.state;
     const order = state.get("order");
