@@ -38,7 +38,9 @@
             </div>
           {{/each}}
 
+          {{#if notCanceled}}
           {{> coreOrderCancelOrder order=.}}
+          {{/if}}
         </div>
       {{/each}}
 
