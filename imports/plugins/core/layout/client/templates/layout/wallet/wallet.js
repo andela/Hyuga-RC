@@ -24,7 +24,7 @@ Template.wallet.events({
       return false;
     }
     const to = document.getElementById("recipient").value;
-    const transaction = {amount, to, date: new Date(), transactionType: "Debit"};
+    const transaction = { amount, to, date: new Date(), transactionType: "Debit" };
     Meteor.call("wallet/transaction", Meteor.userId(), transaction, (err, res) => {
       if (res === 2) {
         Alerts.toast(`No user with email ${to}`, "error");
@@ -43,7 +43,7 @@ Template.wallet.onCreated(function () {
   this.state = new ReactiveDict();
   this.autorun(() => {
     this.state.setDefault({
-      details: {balance: 0, transactions: []}
+      details: { balance: 0, transactions: [] }
     });
     this.subscribe("transactionDetails", Meteor.userId());
     const transactionInfo = Wallet.find().fetch();
@@ -61,22 +61,49 @@ Template.wallet.helpers({
   }
 });
 
+const handlePayment = (transactionId) => {
+  HTTP.call("GET", `https://api.paystack.co/transaction/verify/${transactionId}`,
+    { headers: { Authorization: "Bearer sk_test_d09c5600204ad4b0af2b239a468fb8b5fe981c50" } },
+    function (error, response) {
+      if (error) {
+        Alerts.toast("Unable to verify payment", "error");
+      } else if (response.data.data.status !== "success") {
+        Alerts.toast("Payment was unsuccessful", "error");
+      } else {
+        const paystackResponse = response.data.data;
+        paystackMethod = {
+          processor: "Paystack",
+          storedCard: paystackResponse.authorization.last4,
+          method: "Paystack",
+          transactionId: paystackResponse.reference,
+          currency: paystackResponse.currency,
+          amount: paystackResponse.amount,
+          status: paystackResponse.status,
+          mode: "authorize",
+          createdAt: new Date(),
+          transactions: { amount: paystackResponse.amount / 100, referenceId: paystackResponse.reference,
+            date: new Date(), transactionType: "Credit" }
+        };
+        Meteor.call("wallet/transaction", Meteor.userId(), paystackMethod.transactions, (err, res) => {
+          if (res) {
+            document.getElementById("depositAmount").value = "";
+            Alerts.toast("Your deposit was successful", "success");
+          } else {
+            Alerts.toast("An error occured, please try again", "error");
+          }
+        });
+      }
+    });
+};
+
 // Paystack payment
 payWithPaystack = (email, amount) => {
   const handler = PaystackPop.setup({
-    key: "pk_test_2594e8950a3a70fc754d143c4fc6721e8138f70c",
+    key: "pk_test_bc91df13224e8a49c9080692f77cc529378b916f",
     email: email,
     amount: amount * 100,
     callback: function (response) {
-      const transaction = { amount: amount, referenceId: response.reference, date: new Date(), transactionType: "Credit" };
-      Meteor.call("wallet/transaction", Meteor.userId(), transaction, (err, res) => {
-        if (res) {
-          document.getElementById("depositAmount").value = "";
-          Alerts.toast("Your deposit was successful", "success");
-        } else {
-          Alerts.toast("An error occured, please try again", "error");
-        }
-      });
+      handlePayment(response.reference);
     }
   });
   handler.openIframe();
