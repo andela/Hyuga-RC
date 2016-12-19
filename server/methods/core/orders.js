@@ -374,23 +374,9 @@ Meteor.methods({
 
     // Use a loop to send to all vendors and buyers for all products.
     // TODO: concatenate all products so that a single message can be sent to the buyer containing all the products he bought.
+    let products = '';
     for (let i = 0; i < numberOfItems; i += 1) {
-      jusibe.getCredits((req, res) => {
-        if (res.statusCode !== 200) {
-          Logger.error(`No SMS credit remaining: error code: ${res.statusCode}`);
-        }
-        const buyerMsgContent = {
-          to: buyerPhoneNumber,
-          from: "Reaction",
-          message: `Your order for ${order.items[i].title} has been received and is now being processed. Thanks for your patronage.`
-        };
-        jusibe.sendSMS(buyerMsgContent, (err, result) => {
-          if (result.statusCode !== 200) {
-            Logger.warn("SMS not sent to buyer!");
-          }
-          Logger.info("SMS notification sent to buyer");
-        });
-      });
+      products += ` ${order.items[i].title},`;
 
       // Get Shop information
       const vendorShop = Shops.findOne(order.items[i].shopId);
@@ -415,6 +401,23 @@ Meteor.methods({
         });
       });
     }
+
+    jusibe.getCredits((req, res) => {
+      if (res.statusCode !== 200) {
+        Logger.error(`No SMS credit remaining: error code: ${res.statusCode}`);
+      }
+      const buyerMsgContent = {
+        to: buyerPhoneNumber,
+        from: "Reaction",
+        message: `Your order for ${products} has been received and is now being processed. Thanks for your patronage.`
+      };
+      jusibe.sendSMS(buyerMsgContent, (err, result) => {
+        if (result.statusCode !== 200) {
+          Logger.warn("SMS not sent to buyer!");
+        }
+        Logger.info("SMS notification sent to buyer");
+      });
+    });
 
     // Get shop logo, if available
     let emailLogo;
