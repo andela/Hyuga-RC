@@ -19,7 +19,7 @@ const handlePayment = (transactionId) => {
   function (error, response) {
     if (error) {
       Alerts.toast("Unable to verify payment", "error");
-    } else if (response.data.data.status !== 'success') {
+    } else if (response.data.data.status !== "success") {
       Alerts.toast("Payment was unsuccessful", "error");
     } else {
       const paystackResponse = response.data.data;
