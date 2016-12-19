@@ -1,8 +1,8 @@
 /* eslint camelcase: 0 */
 import { Meteor } from "meteor/meteor";
 import { Template } from "meteor/templating";
-import { Cart, Shops, Accounts } from "/lib/collections";
-// import { PaystackSchema } from "../../lib/collections/schemas";
+import { Reaction } from "/client/api";
+import { Cart, Shops, Accounts, Packages } from "/lib/collections";
 
 import "./paystack.html";
 
@@ -13,9 +13,17 @@ const getOrderPrice = () => {
   return parseInt(cart.cartTotal() * exchangeRate, 10);
 };
 
+const getPaystackSettings = () => {
+  return Packages.findOne({
+    name: "paystack",
+    shopId: Reaction.getShopId()
+  });
+};
+
 const handlePayment = (transactionId) => {
+  const paystackDetails = getPaystackSettings();
   HTTP.call("GET", `https://api.paystack.co/transaction/verify/${transactionId}`,
-  {headers: {Authorization: "Bearer sk_test_d09c5600204ad4b0af2b239a468fb8b5fe981c50"}},
+  {headers: {Authorization: `Bearer ${paystackDetails.settings.secretkey}`}},
   function (error, response) {
     if (error) {
       Alerts.toast("Unable to verify payment", "error");
@@ -48,8 +56,9 @@ const handlePayment = (transactionId) => {
 
 // Paystack payment
 const payWithPaystack = (email, amount) => {
+  const paystackDetails = getPaystackSettings();
   const handler = PaystackPop.setup({
-    key: "pk_test_bc91df13224e8a49c9080692f77cc529378b916f",
+    key: paystackDetails.settings.publickey,
     email: email,
     amount: amount * 100,
     callback: function (response) {

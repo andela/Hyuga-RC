@@ -7,8 +7,8 @@ Reaction.registerPackage({
   icon: "fa fa-credit-card-alt",
   autoEnable: false,
   settings: {
-    mode: false,
-    apiKey: ""
+    secretkey: "",
+    publickey: ""
   },
   registry: [
     // Dashboard card
