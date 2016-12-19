@@ -57,9 +57,7 @@ Template.walletPayment.onCreated(function () {
 
 Template.walletPayment.helpers({
   balance: () => {
-    const balance = Template.instance().state.get("details").balance;
-    const currency = Shops.findOne().currency;
-    return `${currency} ${balance}`;
+    return Template.instance().state.get("details").balance;
   }
 });
 
