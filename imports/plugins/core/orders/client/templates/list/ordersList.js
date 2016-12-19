@@ -37,5 +37,8 @@ Template.dashboardOrdersList.helpers({
   shopName() {
     const shop = Shops.findOne(this.shopId);
     return shop !== null ? shop.name : void 0;
+  },
+  hasComment() {
+    return this.comments.length > 0;
   }
 });

@@ -213,6 +213,7 @@ Meteor.methods({
       throw new Meteor.Error(403, "Access Denied");
     }
 
+    // TODO: Refund order
     return Orders.update(order._id, {
       $set: {
         "workflow.status": "canceled"
