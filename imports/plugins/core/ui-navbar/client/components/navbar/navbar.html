@@ -4,7 +4,9 @@
     <i class="{{NotificationIcon}}"></i>
     <span class="caret"></span>
   </div>
+  {{#if checkNotification}}
     {{> dropDownNotifications}}
+  {{/if}}
 </template>
 
 <template name="dropDownNotifications">

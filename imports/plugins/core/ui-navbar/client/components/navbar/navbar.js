@@ -52,6 +52,11 @@ Template.notificationDropdown.helpers({
     return (Template.instance().notification.get() > 0)
     ? "fa fa-bell"
     : "fa fa-bell-o";
+  },
+  checkNotification() {
+    return (Template.instance().notification.get() > 0)
+    ? true
+    : false;
   }
 });
 Template.notificationItem.helpers({
