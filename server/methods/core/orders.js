@@ -332,7 +332,7 @@ Meteor.methods({
 
     // TODO: add  'seen' criteria to the notification
     // to check if the user has opened the notification.
-    const notification = Notifications.findOne({userId: currentUserId});
+    const notification = Notifications.find({userId: currentUserId}).fetch();
     return (notification) ? notification : false;
   },
 
@@ -360,6 +360,13 @@ Meteor.methods({
       type: "new",
       message: "Order creation successful!"
     };
+
+    if (order.workflow.status === "coreOrderWorkflow/processing") {
+      notification.name = "Order Shipped";
+      notification.type = "Completed";
+      notification.message = "Your order has been shipped!";
+    }
+
     check(notification, Schemas.Notifications);
     // Insert new order into the notifications database.
     Notifications.insert(notification);
@@ -374,7 +381,7 @@ Meteor.methods({
 
     // Use a loop to send to all vendors and buyers for all products.
     // TODO: concatenate all products so that a single message can be sent to the buyer containing all the products he bought.
-    let products = '';
+    let products = "";
     for (let i = 0; i < numberOfItems; i += 1) {
       products += ` ${order.items[i].title},`;
 
@@ -393,12 +400,14 @@ Meteor.methods({
           from: "New Order",
           message: `An order has been placed for ${order.items[i].title}, visit your reaction commerce dashboard to view and process orders.`
         };
-        jusibe.sendSMS(vendorMsgContent, (err, result) => {
-          if (result.statusCode !== 200) {
-            Logger.warn("SMS not sent to vendor");
-          }
-          Logger.info("New order notification sent to vendor");
-        });
+        if (order.workflow.status === "new") {
+          // jusibe.sendSMS(vendorMsgContent, (err, result) => {
+          //   if (result.statusCode !== 200) {
+          //     Logger.warn("SMS not sent to vendor");
+          //   }
+          //   Logger.info("New order notification sent to vendor");
+          // });
+        }
       });
     }
 
@@ -411,12 +420,22 @@ Meteor.methods({
         from: "Reaction",
         message: `Your order for ${products} has been received and is now being processed. Thanks for your patronage.`
       };
-      jusibe.sendSMS(buyerMsgContent, (err, result) => {
-        if (result.statusCode !== 200) {
-          Logger.warn("SMS not sent to buyer!");
-        }
-        Logger.info("SMS notification sent to buyer");
-      });
+      if (order.workflow.status === "new") {
+        // jusibe.sendSMS(buyerMsgContent, (err, result) => {
+        //   if (result.statusCode !== 200) {
+        //     Logger.warn("SMS not sent to buyer!");
+        //   }
+        //   Logger.info("SMS notification sent to buyer");
+        // });
+      } else if (order.workflow.status === "coreOrderWorkflow/processing") {
+        buyerMsgContent.message = "The order you placed on reaction commerce store has been shipped.";
+        // jusibe.sendSMS(buyerMsgContent, (err, result) => {
+        //   if (result.statusCode !== 200) {
+        //     Logger.warn("Shipping SMS not sent to buyer!");
+        //   }
+        //   Logger.info("Shipping SMS notification sent to buyer");
+        // });
+      }
     });
 
     // Get shop logo, if available
