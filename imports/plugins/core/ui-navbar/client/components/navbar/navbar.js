@@ -73,3 +73,19 @@ Template.CoreNavigationBar.helpers({
     };
   }
 });
+
+Template.pages.onCreated(() => {
+  this.subscribe("Pages");
+});
+
+Template.pages.helpers({
+  pageDisplay() {
+    return StaticPages.find();
+  },
+  pathForPage() {
+    const routeName = this.pageRoute;
+    const path = FlowROuter.path(routeName);
+
+    return path;
+  }
+});
