@@ -17,6 +17,43 @@ Template.notificationItem.onCreated(function () {
     });
   });
 });
+
+Template.notificationDropdown.onCreated(function () {
+  this.notification = ReactiveVar();
+
+  // Create an auto run to Check for notifications on page load
+  // and set the notification reactive variable.
+  this.autorun(() => {
+    const instance = this;
+    Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
+      instance.notification.set(res.length);
+    });
+  });
+});
+
+Template.dropDownNotifications.events({
+    /**
+   * Clear Notifications
+   * @param  {Event} event - jQuery Event
+   * @return {void}
+   */
+  "click #clearNotifications": (event) => {
+    event.preventDefault();
+    Meteor.call("notifications/clearNotifications", Meteor.userId(), (err, res) => {
+      // Do nothing
+    });
+  }
+});
+
+Template.notificationDropdown.helpers({
+  NotificationIcon() {
+  // Check if the user has pending notifications
+  // and set the appropriate Icon
+    return (Template.instance().notification.get() > 0)
+    ? "fa fa-bell"
+    : "fa fa-bell-o";
+  }
+});
 Template.notificationItem.helpers({
   showNotification() {
     // Change the display state of the notification to show the latest notification when clicked
@@ -25,17 +62,6 @@ Template.notificationItem.helpers({
     //   console.log(res[0]);
     //   return res;
     // });
-  },
-  NotificationIcon() {
-  // Check if the user has pending notifications
-  // and set the appropriate Icon
-    const icon = (Template.instance().notification.get())
-    ? "fa fa-bell"
-    : "fa fa-bell-o";
-
-    return {
-      icon: icon
-    };
   }
 });
 Template.CoreNavigationBar.onCreated(function () {

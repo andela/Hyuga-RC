@@ -336,6 +336,21 @@ Meteor.methods({
     return (notification) ? notification : false;
   },
 
+    /**
+   * Clear user notifications
+   * @param {String} currentUserId - ID of the current user
+   */
+
+  "notifications/clearNotifications": function (currentUserId) {
+    try {
+      check(currentUserId, String);
+    } catch (e) {
+      // Fail silently if the userId is not matched.
+    }
+
+    Notifications.remove({userId: currentUserId});
+  },
+
   /**
    * orders/sendNotification
    *
