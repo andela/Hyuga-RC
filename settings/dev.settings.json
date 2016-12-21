@@ -7,5 +7,7 @@
     "REACTION_EMAIL": ""
   },
   "isDebug": "info",
-  "public": {}
+  "public": {},
+  "JUSIBE_PUBLIC_KEY": "0c20d915e92b2718e50be245d350db64",
+  "JUSIBE_TOKEN": "112e8722137c75496b93b7ce80713a68"
 }

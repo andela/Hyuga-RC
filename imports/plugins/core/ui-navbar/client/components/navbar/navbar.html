@@ -13,6 +13,7 @@
      <div class="user-notifications-dropdown-content">
       {{> DropdownApps}}
     </div>
+    <li class="divider"></li>
     <div class="btn btn-primary btn-block" id="clearNotifications">Clear All</div>
    </div>
   </div>
@@ -21,7 +22,6 @@
 <template name="DropdownApps">
     <ul class="user-notifications-dropdown-apps">
       {{> notificationItem}}
-      <li class="divider"></li>
     </ul>
 </template>
 
@@ -41,9 +41,7 @@
       {{> tagNav tagNavProps}}
     </div>
     <div class="notificationsList"></div>
-    <!--<div class="notifications" data-step="4" data-intro="Notifications">{{> React NotificationButtonComponent}}</div>-->
     <div class="notifications" data-step="4" data-intro="Notifications">{{> note tpl="notificationDropdown"}}</div>
-    <!--<div class="notifications" data-step="4" data-intro="Notifications">{{> DropdownApps}}</div>-->
     <div class="search" data-step="4" data-intro="Do a Quick Search">{{> React IconButtonComponent}}</div>
     <div class="languages hidden-xs" data-step="5" data-intro="Choose Preferred Language">{{> i18nChooser}}</div>
     <div class="accounts" data-step="6" data-intro="Access Quick Drop-down for Site Shortcuts">{{> accounts tpl="loginDropdown"}}</div>

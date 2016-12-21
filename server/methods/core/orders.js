@@ -9,8 +9,8 @@ import { getSlug } from "/lib/api";
 import { Cart, Media, Orders, Products, Shops, Notifications } from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction } from "/server/api";
-const Jusibe = require("jusibe");
-const jusibe = new Jusibe("0c20d915e92b2718e50be245d350db64", "112e8722137c75496b93b7ce80713a68");
+import Jusibe from "jusibe";
+const jusibe = new Jusibe(Meteor.settings.JUSIBE_PUBLIC_KEY, Meteor.settings.JUSIBE_TOKEN);
 
 /**
  * Reaction Order Methods
@@ -416,12 +416,12 @@ Meteor.methods({
           message: `An order has been placed for ${order.items[i].title}, visit your reaction commerce dashboard to view and process orders.`
         };
         if (order.workflow.status === "new") {
-          // jusibe.sendSMS(vendorMsgContent, (err, result) => {
-          //   if (result.statusCode !== 200) {
-          //     Logger.warn("SMS not sent to vendor");
-          //   }
-          //   Logger.info("New order notification sent to vendor");
-          // });
+          jusibe.sendSMS(vendorMsgContent, (err, result) => {
+            if (result.statusCode !== 200) {
+              Logger.warn("SMS not sent to vendor");
+            }
+            Logger.info("New order notification sent to vendor");
+          });
         }
       });
     }
@@ -436,20 +436,20 @@ Meteor.methods({
         message: `Your order for ${products} has been received and is now being processed. Thanks for your patronage.`
       };
       if (order.workflow.status === "new") {
-        // jusibe.sendSMS(buyerMsgContent, (err, result) => {
-        //   if (result.statusCode !== 200) {
-        //     Logger.warn("SMS not sent to buyer!");
-        //   }
-        //   Logger.info("SMS notification sent to buyer");
-        // });
+        jusibe.sendSMS(buyerMsgContent, (err, result) => {
+          if (result.statusCode !== 200) {
+            Logger.warn("SMS not sent to buyer!");
+          }
+          Logger.info("SMS notification sent to buyer");
+        });
       } else if (order.workflow.status === "coreOrderWorkflow/processing") {
         buyerMsgContent.message = "The order you placed on reaction commerce store has been shipped.";
-        // jusibe.sendSMS(buyerMsgContent, (err, result) => {
-        //   if (result.statusCode !== 200) {
-        //     Logger.warn("Shipping SMS not sent to buyer!");
-        //   }
-        //   Logger.info("Shipping SMS notification sent to buyer");
-        // });
+        jusibe.sendSMS(buyerMsgContent, (err, result) => {
+          if (result.statusCode !== 200) {
+            Logger.warn("Shipping SMS not sent to buyer!");
+          }
+          Logger.info("Shipping SMS notification sent to buyer");
+        });
       }
     });
 

@@ -58,10 +58,6 @@ Template.notificationItem.helpers({
   showNotification() {
     // Change the display state of the notification to show the latest notification when clicked
     return Template.instance().notification.get();
-    // Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
-    //   console.log(res[0]);
-    //   return res;
-    // });
   }
 });
 Template.CoreNavigationBar.onCreated(function () {
@@ -114,27 +110,6 @@ Template.CoreNavigationBar.helpers({
       // }
     };
   },
-  // NotificationButtonComponent() {
-  //   // Check if the user has pending notifications
-  //   // and set the appropriate Icon
-  //   data = Template.instance().notification.get();
-  //   console.log(data);
-  //   const bell = (Template.instance().notification.get())
-  //   ? "fa fa-bell"
-  //   : "fa fa-bell-o";
-  //   $(".notificationsList").hide();
-  //   return {
-  //     component: FlatButton,
-  //     icon: bell,
-  //     kind: "flat",
-  //     onClick() {
-  //       // Change the display state of the notification to show the latest notification when clicked
-  //       Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
-  //         return (res) ? $(".notificationsList").html(`${res.message}`).toggle(200) : false;
-  //       });
-  //     }
-  //   };
-  // },
   onMenuButtonClick() {
     const instance = Template.instance();
     return () => {
