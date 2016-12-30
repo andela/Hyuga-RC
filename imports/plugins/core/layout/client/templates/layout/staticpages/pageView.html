@@ -1,0 +1,14 @@
+<template name="pageView">
+  {{ #each page in singlePage data }}
+    <div class="container">
+      <h2 class="staticPageTitle">
+        {{ page.pageTitle }}
+      </h2>
+      <hr>
+      <h4>
+        {{ page.pageBody }}
+      </h4>
+      <br>
+    </div>
+  {{ /each }}
+</template>
