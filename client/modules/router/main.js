@@ -182,6 +182,20 @@ Router.initPackageRoutes = () => {
       }
     });
 
+    /**
+     * Uses RC defined method of passing params of each generated page route
+     * as data to the pageView template which is used by the helper as an
+     * argument to determine which page to render
+     */
+    shop.route("/pages/:pageRoute/", {
+      action(params) {
+        ReactionLayout({
+          template: "pageView",
+          data: params.pageRoute
+        });
+      }
+    });
+
     // get package registry route configurations
     for (const pkg of pkgs) {
       const newRoutes = [];
