@@ -1,6 +1,7 @@
 import { FlatButton } from "/imports/plugins/core/ui/client/components";
 import { Reaction } from "/client/api";
-import { Tags } from "/lib/collections";
+import { FlowROuter } from "meteor/kadira:flow-router-ssr";
+import { Tags, StaticPages } from "/lib/collections";
 
 Template.CoreNavigationBar.onCreated(function () {
   this.state = new ReactiveDict();
