@@ -2,10 +2,10 @@
 
   <div class="container">
     <div class="col-md-6">
-      <h1>Manage Pages</h1>
+      <h1>Manage Your Custom Pages</h1>
       <hr>
       <ul>
-        {{#each createdPages}} {{ pageName }} {{/each}}
+        {{#each displayPages }} {{> displayPageName }} {{/each}}
       </ul>
 
     </div>
@@ -18,13 +18,13 @@
         <div class="form-group">
           <label for="page-name">Page Name:</label>
 
-          <input type="text" class="form-control" name="name" placeholder="Enter page name">
+          <input type="text" class="form-control" name="name" id="name" placeholder="Enter page name">
 
         </div>
         <div class="form-group">
           <label for="page-title">Page Title:</label>
 
-          <input type="text" class="form-control" name="title" placeholder="Enter page title">
+          <input type="text" class="form-control" name="title" id="title" placeholder="Enter page title">
 
         </div>
 
@@ -34,11 +34,10 @@
           CKEDITOR.replace("body");
         </script>
         <br>
-        <!--<input type="submit" class="btn btn-primary" value="Create Page"/>-->
 
         <div class="form-group">
           <div class="pull-left">
-            <button type="submit" class="btn btn-primary">Create Page</button>
+            <button type="submit" class="btn btn-info" id="btn-update">Create Page</button>
           </div>
         </div>
       </form>
