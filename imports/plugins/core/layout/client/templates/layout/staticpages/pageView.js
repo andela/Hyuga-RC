@@ -1,6 +1,6 @@
 import { StaticPages } from "/lib/collections";
 
-Template.pageView.onCreated(() => {
+Template.pageView.onCreated(function () {
   this.subscribe("Pages");
 });
 
