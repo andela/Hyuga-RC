@@ -1,6 +1,8 @@
 import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
 import {StaticPages } from "/lib/collections";
+import * as Collections from "/lib/collections";
+import * as Schemas from "/lib/collections/schemas";
 
 Meteor.methods({
   /**
@@ -15,14 +17,21 @@ Meteor.methods({
     check(body, String);
 
     const url = `pages/${name.replace(" ", "-").toLowerCase()}`;
-
-    StaticPages.insert({
+    let shopId;
+    Meteor.call("shop/getShopId", Meteor.userId(), (err, res) => {
+      shopId = res._id;
+    });
+    const page = {
       pageName: name,
       pageRoute: url,
       pageTitle: title,
       pageBody: body,
-      pageOwner: Meteor.userId()
-    });
+      pageOwner: Meteor.userId(),
+      shopId: shopId,
+      createdAt: new Date
+    };
+    check(page, Schemas.staticPages);
+    Collections.StaticPages.insert(page);
   },
 
   /**
