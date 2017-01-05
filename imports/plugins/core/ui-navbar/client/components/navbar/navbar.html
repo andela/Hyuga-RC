@@ -13,16 +13,3 @@
     <div class="cart-alert">{{> cartPanel}}</div>
   </div>
 </template>
-
-<template name="pages">
-  <div class="dropdown">
-    <div class="dropdown-toggle accounts" data-toggle="dropdown">
-      Static Pages
-    </div>
-    <ul class="dropdown-menu">
-      {{ #each pagesDisplay }}
-      <li><a href="/{{ pathForPage }}"> {{ pageName }} </a></li>
-      {{ /each }}
-    </ul>
-  </div>
-</template>
