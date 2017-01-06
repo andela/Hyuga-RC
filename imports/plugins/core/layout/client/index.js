@@ -18,6 +18,8 @@ import "./templates/layout/notFound/notFound.js";
 import "./templates/layout/notice/unauthorized.html";
 import "./templates/layout/staticpages/pageView.html";
 import "./templates/layout/staticpages/pageView.js";
+import "./templates/layout/staticpages/shopView.html";
+import "./templates/layout/staticpages/shopView.js";
 import "./templates/layout/layout.html";
 
 import "./templates/theme/theme.html";
