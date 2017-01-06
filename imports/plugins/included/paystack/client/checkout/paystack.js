@@ -20,40 +20,6 @@ const getPaystackSettings = () => {
   });
 };
 
-const handlePayment = (transactionId) => {
-  const paystackDetails = getPaystackSettings();
-  HTTP.call("GET", `https://api.paystack.co/transaction/verify/${transactionId}`,
-  {headers: {Authorization: `Bearer ${paystackDetails.settings.secretkey}`}},
-  function (error, response) {
-    if (error) {
-      Alerts.toast("Unable to verify payment", "error");
-    } else if (response.data.data.status !== "success") {
-      Alerts.toast("Payment was unsuccessful", "error");
-    } else {
-      const paystackResponse = response.data.data;
-      paystackMethod = {
-        processor: "Paystack",
-        storedCard: paystackResponse.authorization.last4,
-        method: "Paystack",
-        transactionId: paystackResponse.reference,
-        currency: paystackResponse.currency,
-        amount: paystackResponse.amount,
-        status: paystackResponse.status,
-        mode: "authorize",
-        createdAt: new Date(),
-        transactions: []
-      };
-      const transactionObject = {
-        amount: (paystackResponse.amount / 100),
-        transactionId: paystackResponse.reference,
-        currency: paystackResponse.currency
-      };
-      paystackMethod.transactions.push(transactionObject);
-      Meteor.call("cart/submitPayment", paystackMethod);
-    }
-  });
-};
-
 // Paystack payment
 const payWithPaystack = (email, amount) => {
   const paystackDetails = getPaystackSettings();
@@ -62,7 +28,7 @@ const payWithPaystack = (email, amount) => {
     email: email,
     amount: amount * 100,
     callback: function (response) {
-      handlePayment(response.reference);
+      handlePayment(response.reference, "payment");
     }
   });
   handler.openIframe();
