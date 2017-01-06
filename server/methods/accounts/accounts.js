@@ -46,7 +46,9 @@ Meteor.methods({
       "reaction-dashboard",
       "reaction-orders",
       "orders",
-      "dashboard/orders"
+      "dashboard/orders",
+      "static-pages",
+      "Static Pages"
     );
     Meteor.users.update({_id: Meteor.userId()}, {$set: {roles: userDetails.roles}});
     return Collections.Shops.insert({
