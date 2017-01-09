@@ -58,6 +58,8 @@
           "ordersDescription": "Fulfill your orders",
           "paypalLabel": "PayPal",
           "paypalTitle": "PayPal",
+          "paystackLabel": "PayStack",
+          "paystackTitle": "PayStack",
           "paypalDescription": "PayPal payments",
           "revisionsLabel": "Revisions",
           "revisionsTitle": "Revisions",

@@ -28,7 +28,6 @@ Router.Hooks = Hooks;
  */
 function checkRouterPermissions(context) {
   const routeName = context.route.name;
-
   if (Reaction.hasPermission(routeName, Meteor.userId())) {
     if (context.unauthorized === true) {
       delete context.unauthorized;
@@ -202,6 +201,13 @@ Router.initPackageRoutes = () => {
           template: "shopView",
           data: params.shopId
         });
+      }
+    });
+
+    shop.route("/wallet", {
+      name: "wallet",
+      action() {
+        ReactionLayout({template: "wallet"});
       }
     });
 
