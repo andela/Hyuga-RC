@@ -1,42 +1,30 @@
 <template name="staticPage">
-
   <div class="container">
-
-
     <div class="col-md-6">
-
       <h1>Create a New Page</h1>
       <hr>
       <form class="new_page">
         <div class="form-group">
           <label for="page-name">Page Name:</label>
-
           <input type="text" class="form-control" name="name" id="name" placeholder="Enter page name">
-
         </div>
         <div class="form-group">
           <label for="page-title">Page Title:</label>
-
           <input type="text" class="form-control" name="title" id="title" placeholder="Enter page title">
-
         </div>
-
         <h4>Page Content:</h4>
         <textarea cols="20" rows="10" name="body"></textarea>
         <script>
           CKEDITOR.replace("body");
         </script>
         <br>
-
         <div class="form-group">
           <div class="pull-left">
             <button type="submit" class="btn btn-info" id="btn-update">Create Page</button>
           </div>
         </div>
       </form>
-
     </div>
-
     <div class="col-md-6">
       <h1>Manage Your Custom Pages</h1>
       <hr>
@@ -46,9 +34,7 @@
         {{ /each }}
       </ul>
     </div>
-
   </div>
-
 </template>
 
 <template name="displayPageName">

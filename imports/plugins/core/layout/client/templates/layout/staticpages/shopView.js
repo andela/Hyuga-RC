@@ -1,6 +1,5 @@
 import { StaticPages } from "/lib/collections";
 import { Template } from "meteor/templating";
-// import { Meteor } from "meteor/meteor";
 
 Template.shopView.onCreated(function () {
   this.autorun(() => {
