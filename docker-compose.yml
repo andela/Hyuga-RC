@@ -10,8 +10,9 @@ reaction:
   environment:
     ROOT_URL: "http://localhost"
     MONGO_URL: "mongodb://mongo:27017/reaction"
-    JUSIBE_PUBLIC_KEY: "0c20d915e92b2718e50be245d350db64"
-    JUSIBE_TOKEN: "112e8722137c75496b93b7ce80713a68"
+    # Insert Jusibe Public Key and API Token
+    JUSIBE_PUBLIC_KEY: ""
+    JUSIBE_TOKEN: ""
 
 mongo:
   image: mongo:latest

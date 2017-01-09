@@ -6,27 +6,27 @@ import { Template } from "meteor/templating";
 
 
 Template.notificationItem.onCreated(function () {
-  this.notification = ReactiveVar();
+  this.notifications = ReactiveVar();
 
   // Create an auto run to Check for notifications on page load
   // and set the notification reactive variable.
   this.autorun(() => {
     const instance = this;
     Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
-      instance.notification.set(res);
+      instance.notifications.set(res);
     });
   });
 });
 
 Template.notificationDropdown.onCreated(function () {
-  this.notification = ReactiveVar();
+  this.notifications = ReactiveVar();
 
   // Create an auto run to Check for notifications on page load
   // and set the notification reactive variable.
   this.autorun(() => {
     const instance = this;
     Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
-      instance.notification.set(res.length);
+      instance.notifications.set(res.length);
     });
   });
 });
@@ -49,20 +49,18 @@ Template.notificationDropdown.helpers({
   NotificationIcon() {
   // Check if the user has pending notifications
   // and set the appropriate Icon
-    return (Template.instance().notification.get() > 0)
+    return (Template.instance().notifications.get() > 0)
     ? "fa fa-bell"
     : "fa fa-bell-o";
   },
   checkNotification() {
-    return (Template.instance().notification.get() > 0)
-    ? true
-    : false;
+    return (Template.instance().notifications.get() > 0);
   }
 });
 Template.notificationItem.helpers({
   showNotification() {
     // Change the display state of the notification to show the latest notification when clicked
-    return Template.instance().notification.get();
+    return Template.instance().notifications.get();
   }
 });
 Template.CoreNavigationBar.onCreated(function () {
@@ -96,8 +94,6 @@ Template.CoreNavigationBar.events({
     }, $("body").get(0));
     $("body").css("overflow", "hidden");
     $("#search-input").focus();
-  },
-  "click .notifications": function (events, template) {
   }
 });
 
