@@ -326,14 +326,13 @@ Meteor.methods({
   "notifications/getNotifications": function (currentUserId) {
     try {
       check(currentUserId, String);
+      // TODO: add  'seen' criteria to the notification
+      // to check if the user has opened the notification.
+      const notification = Notifications.find({userId: currentUserId}).fetch();
+      return (notification) ? notification : false;
     } catch (e) {
       // Fail silently if the userId is not matched.
     }
-
-    // TODO: add  'seen' criteria to the notification
-    // to check if the user has opened the notification.
-    const notification = Notifications.find({userId: currentUserId}).fetch();
-    return (notification) ? notification : false;
   },
 
     /**
@@ -344,11 +343,10 @@ Meteor.methods({
   "notifications/clearNotifications": function (currentUserId) {
     try {
       check(currentUserId, String);
+      Notifications.remove({userId: currentUserId});
     } catch (e) {
       // Fail silently if the userId is not matched.
     }
-
-    Notifications.remove({userId: currentUserId});
   },
 
   /**
