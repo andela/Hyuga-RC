@@ -8,6 +8,6 @@
   },
   "isDebug": "info",
   "public": {},
-  "JUSIBE_PUBLIC_KEY": "",
-  "JUSIBE_TOKEN": ""
+  "JUSIBE_PUBLIC_KEY": "ABCDEF12345",
+  "JUSIBE_TOKEN": "ABCDEF12345"
 }
