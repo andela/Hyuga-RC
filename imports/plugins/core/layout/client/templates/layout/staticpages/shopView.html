@@ -1,0 +1,18 @@
+<template name="shopView">
+  <h3 class="shopWelcomeMessage">Welcome to Our Shop</h3>
+  <hr>
+  <br>
+  {{ #each page in shopPage }}
+    <div class="shopPage">
+      <div>
+        <h2> {{ page.pageTitle }} </h2>
+      </div>
+      <hr>
+      <div>
+        <h4> {{{ page.pageBody }}} </h4>
+      </div>
+    </div>
+    <br>
+    <br>
+  {{ /each }}
+</template>
