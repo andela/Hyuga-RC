@@ -10,7 +10,6 @@ import { Cart, Media, Orders, Products, Shops, Notifications } from "/lib/collec
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction } from "/server/api";
 import Jusibe from "jusibe";
-const jusibe = new Jusibe(Meteor.settings.JUSIBE_PUBLIC_KEY, Meteor.settings.JUSIBE_TOKEN);
 
 /**
  * Reaction Order Methods
@@ -324,6 +323,7 @@ Meteor.methods({
    */
 
   "notifications/getNotifications": function (currentUserId) {
+
     try {
       check(currentUserId, String);
       // TODO: add  'seen' criteria to the notification
@@ -357,6 +357,7 @@ Meteor.methods({
    * @return {Boolean} email/SMS sent or not
    */
   "orders/sendNotification": function (order) {
+    const jusibe = new Jusibe(Meteor.settings.JUSIBE_PUBLIC_KEY, Meteor.settings.JUSIBE_TOKEN);
     check(order, Object);
 
     if (!this.userId) {
