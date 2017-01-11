@@ -1,8 +1,22 @@
 import moment from "moment";
 import { Template } from "meteor/templating";
-import { Orders, Shops } from "/lib/collections";
+import { Orders, Shops, Packages } from "/lib/collections";
 import { i18next } from "/client/api";
 
+Template.dashboardOrdersList.onCreated(function () {
+  this.state = new ReactiveDict();
+  this.state.setDefault({
+    feeds: {}
+  });
+
+  this.autorun(() => {
+    this.subscribe("Packages");
+    const feedsConfig = Packages.findOne({
+      name: "reaction-social"
+    });
+    this.state.set("feeds", feedsConfig.settings.public.apps);
+  });
+});
 /**
  * dashboardOrdersList helpers
  *
@@ -29,6 +43,7 @@ Template.dashboardOrdersList.helpers({
     });
   },
   orderAge() {
+    console.log('andela-hyuga-rc.herokuapp.com' + FlowRouter.current().path);
     return moment(this.createdAt).fromNow();
   },
   shipmentTracking() {
@@ -40,5 +55,13 @@ Template.dashboardOrdersList.helpers({
   },
   hasComment() {
     return this.comments.length > 0;
+  },
+  facebookUrl() {
+    const encodedURL = encodeURIComponent("https://andela-hyuga-rc.herokuapp.com" + FlowRouter.current().path);
+    const facebookConfig = Template.instance().state.get("feeds").facebook;
+    if (facebookConfig.appId !== "" && facebookConfig.enabled) {
+      return `https://www.facebook.com/plugins/share_button.php?href=${encodedURL}&layout=button_count&size=small&mobile_iframe=false&width=88&height=20&appId=${facebookConfig.appId}`
+    }
+    return false;
   }
 });
