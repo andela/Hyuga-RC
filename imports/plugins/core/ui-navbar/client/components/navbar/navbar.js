@@ -1,8 +1,9 @@
 import { Meteor } from "meteor/meteor";
 import { FlatButton } from "/imports/plugins/core/ui/client/components";
 import { Reaction } from "/client/api";
-import { Tags } from "/lib/collections";
 import { Template } from "meteor/templating";
+import { FlowROuter } from "meteor/kadira:flow-router-ssr";
+import { Tags, StaticPages } from "/lib/collections";
 
 
 Template.notificationItem.onCreated(function () {

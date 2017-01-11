@@ -1,0 +1,56 @@
+<template name="staticPage">
+  <div class="container">
+    <div class="col-md-6">
+      <h1>Create a New Page</h1>
+      <hr>
+      <form class="new_page">
+        <div class="form-group">
+          <label for="page-name">Page Name:</label>
+          <input type="text" class="form-control" name="name" id="name" placeholder="Enter page name">
+        </div>
+        <div class="form-group">
+          <label for="page-title">Page Title:</label>
+          <input type="text" class="form-control" name="title" id="title" placeholder="Enter page title">
+        </div>
+        <h4>Page Content:</h4>
+        <textarea cols="20" rows="10" name="body"></textarea>
+        <script>
+          CKEDITOR.replace("body");
+        </script>
+        <br>
+        <div class="form-group">
+          <div class="pull-left">
+            <button type="submit" class="btn btn-info" id="btn-update">Create Page</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <h1>Manage Your Custom Pages</h1>
+      <hr>
+      <ul>
+        {{ #each displayPages }}
+          {{> displayPageName }}
+        {{ /each }}
+      </ul>
+    </div>
+  </div>
+</template>
+
+<template name="displayPageName">
+  <table class="pageNames">
+    <tr>
+      <td style="width: 250px">
+        <span> <strong> {{ pageName }} </strong></span>
+      </td>
+      <td>
+        <div>
+          <button class="btn btn-info edit">Edit</button>
+          <a class="btn btn-success preview" href="/{{ pageRoute }}">Preview</a>
+          <button class="btn btn-danger delete">Delete</button>
+        </div>
+      </td>
+    </tr>
+    <br>
+  </table>
+</template>

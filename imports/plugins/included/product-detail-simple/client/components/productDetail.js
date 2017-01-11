@@ -134,7 +134,9 @@ class ProductDetail extends Component {
                   {this.props.socialComponent}
                 </div>
               </div>
-
+              <div>
+                <a href={"/shop/" + this.product.shopId}><strong> Visit Shop </strong></a>
+              </div>
               <div className="vendor">
                 <ProductField
                   editable={this.editable}
