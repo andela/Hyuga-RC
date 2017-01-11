@@ -43,7 +43,6 @@ Template.dashboardOrdersList.helpers({
     });
   },
   orderAge() {
-    console.log('andela-hyuga-rc.herokuapp.com' + FlowRouter.current().path);
     return moment(this.createdAt).fromNow();
   },
   shipmentTracking() {
