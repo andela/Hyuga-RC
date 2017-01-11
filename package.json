@@ -21,6 +21,7 @@
   "dependencies": {
     "@reactioncommerce/authorize-net": "^1.0.7",
     "accounting-js": "^1.1.1",
+    "analytics-node": "^2.1.0",
     "autonumeric": "^1.9.46",
     "autoprefixer": "^6.5.1",
     "autosize": "^3.0.17",
@@ -45,6 +46,7 @@
     "i18next-sprintf-postprocessor": "^0.2.2",
     "jquery": "^3.1.1",
     "jquery-i18next": "^1.1.0",
+    "jusibe": "^0.2.0",
     "later": "^1.2.0",
     "lodash": "^4.16.3",
     "meteor-node-stubs": "^0.2.3",

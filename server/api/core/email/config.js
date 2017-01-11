@@ -24,6 +24,7 @@ export function getMailUrl() {
     shopMail = shopSettings.mail || {};
   }
 
+
   // get all possible mail settings
   const processUrl = process.env.MAIL_URL;
   const settingsUrl = Meteor.settings.MAIL_URL;
@@ -35,6 +36,8 @@ export function getMailUrl() {
   // https://github.com/nodemailer/nodemailer-wellknown
   if (service && service !== "custom" && user && password) {
     const conf = getServiceConfig(service);
+
+  // TODO: Setup a working service for sendng emails.  
 
     if (conf) {
       // account for local test providers like Maildev
@@ -53,6 +56,8 @@ export function getMailUrl() {
 
   // create the final url from the available options
   const mailUrl = processUrl || settingsUrl || mailString;
+
+  // TODO: Setup a working service for sendng emails.
 
   if (!mailUrl) {
     Logger.warn("Reaction.Email.getMailUrl() - no email provider configured");

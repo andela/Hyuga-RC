@@ -6,9 +6,10 @@ import Future from "fibers/future";
 import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
 import { getSlug } from "/lib/api";
-import { Cart, Media, Orders, Products, Shops } from "/lib/collections";
+import { Cart, Media, Orders, Products, Shops, Notifications } from "/lib/collections";
 import * as Schemas from "/lib/collections/schemas";
 import { Logger, Reaction } from "/server/api";
+import Jusibe from "jusibe";
 
 /**
  * Reaction Order Methods
@@ -366,13 +367,47 @@ Meteor.methods({
   },
 
   /**
+   * Get user notifications
+   * @param {String} currentUserId - ID of the current user
+   * @return {Boolean} - the notification object or false
+   */
+
+  "notifications/getNotifications": function (currentUserId) {
+
+    try {
+      check(currentUserId, String);
+      // TODO: add  'seen' criteria to the notification
+      // to check if the user has opened the notification.
+      const notification = Notifications.find({userId: currentUserId}).fetch();
+      return (notification) ? notification : false;
+    } catch (e) {
+      // Fail silently if the userId is not matched.
+    }
+  },
+
+    /**
+   * Clear user notifications
+   * @param {String} currentUserId - ID of the current user
+   */
+
+  "notifications/clearNotifications": function (currentUserId) {
+    try {
+      check(currentUserId, String);
+      Notifications.remove({userId: currentUserId});
+    } catch (e) {
+      // Fail silently if the userId is not matched.
+    }
+  },
+
+  /**
    * orders/sendNotification
    *
-   * @summary send order notification email
+   * @summary send order notification email and SMS
    * @param {Object} order - order object
-   * @return {Boolean} email sent or not
+   * @return {Boolean} email/SMS sent or not
    */
   "orders/sendNotification": function (order) {
+    const jusibe = new Jusibe(Meteor.settings.JUSIBE_PUBLIC_KEY, Meteor.settings.JUSIBE_TOKEN);
     check(order, Object);
 
     if (!this.userId) {
@@ -382,9 +417,80 @@ Meteor.methods({
 
     this.unblock();
 
-    // Get Shop information
+    // Update the notification collection
+    const notification = {
+      userId: Meteor.userId(),
+      name: "Order Created",
+      type: "new",
+      message: "Order creation successful!"
+    };
+
+    if (order.workflow.status === "coreOrderWorkflow/processing") {
+      notification.name = "Order Shipped";
+      notification.type = "Completed";
+      notification.message = "Your order has been shipped!";
+    }
+
+    check(notification, Schemas.Notifications);
+    // Insert new order into the notifications database.
+    Notifications.insert(notification);
+
+    // Get the total number of items ordered and send notifications for each item.
+    const numberOfItems = order.items.length;
+
+    // Send SMS to the buyers phone using the billing address number.
+    const buyerPhoneNumber = order.billing[0].address.phone;
     const shop = Shops.findOne(order.shopId);
     const shopContact = shop.addressBook[0];
+
+    // Use a loop to send to all vendors and buyers for all products.
+    // TODO: concatenate all products so that a single message can be sent to the buyer containing all the products he bought.
+    let products = "";
+    for (let i = 0; i < numberOfItems; i += 1) {
+      products += ` ${order.items[i].title},`;
+
+      // Get Shop information
+      const vendorShop = Shops.findOne(order.items[i].shopId);
+      const vendorAddress = vendorShop.shopDetails;
+
+      // Send SMS to the vendor
+      const vendorPhoneNumber = (vendorShop.name === "REACTION") ? shopContact.phone : vendorAddress.shopPhone;
+      const vendorMsgContent = {
+        to: vendorPhoneNumber,
+        from: "New Order",
+        message: `An order has been placed for ${order.items[i].title}, visit your reaction commerce dashboard to view and process orders.`
+      };
+      if (order.workflow.status === "new") {
+        jusibe.sendSMS(vendorMsgContent, (err, result) => {
+          if (result.statusCode !== 200) {
+            Logger.warn("SMS not sent to vendor");
+          }
+          Logger.info("New order notification sent to vendor", err);
+        });
+      }
+    }
+
+    const buyerMsgContent = {
+      to: buyerPhoneNumber,
+      from: "Reaction",
+      message: `Your order for ${products} has been received and is now being processed. Thanks for your patronage.`
+    };
+    if (order.workflow.status === "new") {
+      jusibe.sendSMS(buyerMsgContent, (err, result) => {
+        if (result.statusCode !== 200) {
+          Logger.warn("SMS not sent to buyer!");
+        }
+        Logger.info("SMS notification sent to buyer");
+      });
+    } else if (order.workflow.status === "coreOrderWorkflow/processing") {
+      buyerMsgContent.message = "The order you placed on reaction commerce store has been shipped.";
+      jusibe.sendSMS(buyerMsgContent, (err, result) => {
+        if (result.statusCode !== 200) {
+          Logger.warn("Shipping SMS not sent to buyer!");
+        }
+        Logger.info("Shipping SMS notification sent to buyer");
+      });
+    }
 
     // Get shop logo, if available
     let emailLogo;
@@ -484,7 +590,7 @@ Meteor.methods({
     Reaction.Email.send({
       to: order.email,
       from: `${shop.name} <${shop.emails[0].address}>`,
-      subject: `Your order is confirmed`,
+      subject: "Your order is confirmed",
       // subject: `Order update from ${shop.name}`,
       html: SSR.render(tpl,  dataForOrderEmail)
     });
