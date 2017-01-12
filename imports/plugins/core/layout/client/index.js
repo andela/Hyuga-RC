@@ -24,6 +24,8 @@ import "./templates/layout/layout.html";
 import "./templates/layout/wallet/payment.js";
 import "./templates/layout/wallet/wallet.html";
 import "./templates/layout/wallet/wallet.js";
+import "./templates/layout/analytics/analytics.html";
+import "./templates/layout/analytics/analytics.js";
 
 import "./templates/theme/theme.html";
 import "./templates/theme/theme.js";

@@ -43,6 +43,15 @@ Template.loginDropdown.events({
     FlowRouter.go("/wallet");
   },
 
+ /**
+   * analytics button
+   * @param  {Event} event - jQuery Event
+   * @return {void}
+   */
+  "click #analytics": (event) => {
+    event.preventDefault();
+    FlowRouter.go("/analytics");
+  },
   /**
    * Submit sign up form
    * @param  {Event} event - jQuery Event
