@@ -34,6 +34,7 @@
   <ul class="user-accounts-dropdown-apps">
     {{> userAccountsDropdown}}
     {{> tour}}
+    {{> analytics}}
     {{#if currentUser}}
       <li class="dropdown-apps-icon">
         <a id="wallet">
@@ -81,6 +82,17 @@
       <i class="fa fa-plane fa-spin"></i>
       <span class="icon-text">
         Take-Tour
+      </span>
+    </a>
+  </li>
+</template>
+
+<template name="analytics">
+  <li class="dropdown-apps-icon">
+    <a id="analytics">
+      <i class="fa fa-area-chart" aria-hidden="true"></i>
+      <span class="icon-text">
+        Analytics
       </span>
     </a>
   </li>

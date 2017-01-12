@@ -21,6 +21,7 @@
 </head>
 
 <template name="reactionAnalyticsSettings">
+  {{> displayAnalysis}}
   {{#autoForm collection=Collections.Packages schema=Schemas.ReactionAnalyticsPackageConfig doc=packageData type="update" id="analytics-update-form"}}
     {{#if segmentioEnabled}}
       <div class="panel panel-default">
@@ -61,10 +62,7 @@
       </div>
     {{/if}}
   {{/autoForm}}
-
 </template>
-
-
 
 <template name="reactionAnalytics">
 {{#autoForm collection=Collections.Packages schema=Schemas.ReactionAnalyticsPackageConfig doc=packageData type="update" id="analytics-update-form-quick" autosave=true}}
