@@ -9,11 +9,11 @@ Reaction.registerPackage({
     public: {
       segmentio: {
         enabled: false,
-        api_key: ""
+        api_key: "5IPMpdpVZpFA0hPJsiFuDX8Svw668knI"
       },
       googleAnalytics: {
         enabled: false,
-        api_key: ""
+        api_key: "AIzaSyAMsZO__nell4oL8Amx-Wy0Bs5EL6Dlqio"
       },
       mixpanel: {
         enabled: false,

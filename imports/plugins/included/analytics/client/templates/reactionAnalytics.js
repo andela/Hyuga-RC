@@ -8,15 +8,15 @@ Template.reactionAnalyticsSettings.helpers({
     });
   },
   googleAnalyticsEnabled() {
-    // return typeof ga === "function";
-    return true;
+    return typeof ga === "function";
+    // return true;
   },
   segmentioEnabled() {
     return typeof analytics === "object";
   },
   mixpanelEnabled() {
     // return typeof mixpanel === "object";
-    return true;
+    // return true;
   }
 });
 
