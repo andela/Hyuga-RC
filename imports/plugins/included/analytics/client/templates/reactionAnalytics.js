@@ -15,8 +15,7 @@ Template.reactionAnalyticsSettings.helpers({
     return typeof analytics === "object";
   },
   mixpanelEnabled() {
-    // return typeof mixpanel === "object";
-    // return true;
+    return typeof mixpanel === "object";
   }
 });
 

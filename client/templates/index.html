@@ -2,6 +2,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type='text/javascript' src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.3.0/intro.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
     function myIntro() {
       introJs().setOption('showProgress', true).setOption('showStepNumbers', false).start();
@@ -17,16 +18,14 @@
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    </script>
-  <!-- End Google Analytics -->
-  <!-- Load Google analytics API lib -->
-  <script>
-  (function(w,d,s,g,js,fs){
+
+    (function(w,d,s,g,js,fs){
     g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
     js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
     js.src='https://apis.google.com/js/platform.js';
     fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
-  }(window,document,'script'));
-  </script>
-<!-- End Google analytics API lib -->
+    }(window,document,'script'));
+    </script>
+  <!-- End Google Analytics -->
+
 </head>

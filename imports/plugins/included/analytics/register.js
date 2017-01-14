@@ -13,7 +13,7 @@ Reaction.registerPackage({
       },
       googleAnalytics: {
         enabled: false,
-        api_key: "AIzaSyAMsZO__nell4oL8Amx-Wy0Bs5EL6Dlqio"
+        api_key: ""
       },
       mixpanel: {
         enabled: false,
