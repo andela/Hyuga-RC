@@ -14,4 +14,5 @@ BrowserPolicy.content.allowOriginForAll("https://accounts.google.com");
 BrowserPolicy.content.allowOriginForAll("https://content.googleapis.com");
 BrowserPolicy.content.allowOriginForAll("http://www.gstatic.com");
 BrowserPolicy.content.allowOriginForAll("http://csi.gstatic.com");
+BrowserPolicy.content.allowOriginForAll("https://maps.googleapis.com");
 

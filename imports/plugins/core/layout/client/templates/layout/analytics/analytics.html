@@ -3,8 +3,10 @@
     <script type="text/javascript">
       // Load the Visualization API and the corechart package.
       google.charts.load('current', {'packages':['corechart']});
+      google.charts.load('upcoming', {'packages':['geochart']});
       // Set a callback to run when the Google Visualization API is loaded.
       google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawRegionsMap);
       // Callback that creates and populates a data table,
       // instantiates the pie chart, passes in the data and
       // draws it.
@@ -27,8 +29,29 @@
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
+    
+    function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+        ['City',   'Population', 'Area'],
+        ['Lagos',      2761477,    1285.31],
+        ['Abuja',     1324110,    181.76],
+        ['Enugu',     1324110,    181.76]
+      ]);
+
+        var options = {
+        region: 'NG',
+        displayMode: 'markers',
+        colorAxis: {colors: ['green', 'blue']}
+      };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+        chart.draw(data, options);
+      }
     </script>
   </head>
     <!--Div that will hold the pie chart-->
     <div id="chart_div"></div>
+    <!--Div that will hold the regions chart-->
+    <div id="regions_div" style="width: 900px; height: 500px; float: left;"></div>
 </template>
