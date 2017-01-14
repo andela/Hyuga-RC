@@ -1,36 +1,28 @@
 <template name="analyticsPage">
   <head>
-    <!--Load the AJAX API-->
     <script type="text/javascript">
-
       // Load the Visualization API and the corechart package.
       google.charts.load('current', {'packages':['corechart']});
-
       // Set a callback to run when the Google Visualization API is loaded.
       google.charts.setOnLoadCallback(drawChart);
-
       // Callback that creates and populates a data table,
       // instantiates the pie chart, passes in the data and
       // draws it.
       function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-          ['Mushrooms', 3],
-          ['Onions', 1],
-          ['Olives', 1],
-          ['Zucchini', 1],
-          ['Pepperoni', 2]
-        ]);
-
+            // Create the data table.
+          const data = new google.visualization.DataTable();
+          data.addColumn("string", "Topping");
+          data.addColumn("number", "Slices");
+          data.addRows([
+            ["Returning Visitor", {{userData.existingUsers}}],
+            ["New Visitor", {{userData.newUsers}}]
+          ]);
         // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
-                       'width':400,
-                       'height':300};
-
+        const options = {
+          title: "Application Users",
+          width: 500,
+          height: 400
+        };
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
@@ -39,120 +31,4 @@
   </head>
     <!--Div that will hold the pie chart-->
     <div id="chart_div"></div>
-    <!--<div id="embed-api-auth-container"></div>
-    <div id="chart-container"></div>
-    <div id="view-selector-container"></div>
-  <script>
-  gapi.analytics.ready(function() {
-  
-  /**
-     * Authorize the user immediately if the user has already granted access.
-     * If no access has been created, render an authorize button inside the
-     * element with the ID "embed-api-auth-container".
-     */
-    gapi.analytics.auth.authorize({
-      container: 'embed-api-auth-container',
-      // clientid: 'REPLACE WITH YOUR CLIENT ID'
-      apikey: 'AIzaSyC0M3GZeADpFiyzwOH9TJ6jXwCqC0C45Os',
-      clientid: '694098708996-1qldqevopf8akeiq3msqnrpc4jn9jpso.apps.googleusercontent.com',
-      clientsecret: 'r2bIorsqhDjR_-37Ml55J5Bd'
-    });
-
-    /**
-     * Create a new ViewSelector instance to be rendered inside of an
-     * element with the id "view-selector-container".
-     */
-    var viewSelector = new gapi.analytics.ViewSelector({
-      container: 'view-selector-container'
-    });
-
-    // Render the view selector to the page.
-    viewSelector.execute();
-
-    /**
-     * Create a new DataChart instance with the given query parameters
-     * and Google chart options. It will be rendered inside an element
-     * with the id "chart-container".
-     */
-    var dataChart = new gapi.analytics.googleCharts.DataChart({
-      query: {
-        metrics: 'ga:sessions',
-        dimensions: 'ga:date',
-        'start-date': '30daysAgo',
-        'end-date': 'yesterday'
-      },
-      chart: {
-        container: 'chart-container',
-        type: 'LINE',
-        options: {
-          width: '100%'
-        }
-      }
-    });
-
-    /**
-     * Render the dataChart on the page whenever a new view is selected.
-     */
-    viewSelector.on('change', function(ids) {
-      dataChart.set({query: {ids: ids}}).execute();
-    });
-  })
-  </script>-->
-<!--<script>
-  // function gaGetCountry() {
-      $.get('https://www.googleapis.com/analytics/v3/data/ga?' +
-          'ids=ga%3A138009550' +
-          'start-date=2015-07-01&' +
-          'end-date=today&' +
-          'metrics=ga%3Ausers&' +
-          'dimensions=ga%3Acountry&' +
-          'sort=ga%3Ausers&' +
-          'filters=ga%3Ausers%3E10&' +
-          'max-results=50' +
-          '&access_token=ya29.Ci_SAyFq69cVe8q8ru6hOvsFOIwNCgEntOsY66oqBz4lZBFhNDDdnxaXOfRkB6YFQg',
-          function (data, status) {
-              if (status === 'success') {
-                  // Display the Data
-                  drawRegionsMap(data.rows);
-              } else {
-                  console.debug(status);
-              }
-          });
-  }
-    Draw country chart
-function drawRegionsMap(data) {
-
-    var head = data[0];
-    head[0] = 'Country';
-    head[1] = 'Users';
-    for (var i = 1; i < data.length; i++) {
-        var d = data[i];
-        d[1] = Number(d[1]);
-    }
-
-    var chartData = google.visualization.arrayToDataTable(data);
-    var options = {
-        title: 'My Website is viewed from,',
-        domain: 'NG',
-        tooltip: {
-            textStyle: {
-                color: 'navy'
-            },
-            showColorCode: true
-        },
-        legend: {
-            textStyle: {
-                color: 'navy',
-                fontSize: 12
-            }
-        },
-        colorAxis: {
-            colors: ['#00FFFF', '#0000FF']
-        }
-    };
-
-    var chart = new google.visualization.GeoChart(document.getElementById('countryChart'));
-
-    chart.draw(chartData, options);
-</script>-->
 </template>

@@ -8,24 +8,31 @@
       introJs().setOption('showProgress', true).setOption('showStepNumbers', false).start();
     }
   </script>
+    <!-- This demo uses the Chart.js graphing library and Moment.js to do date
+     formatting and manipulation. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
   <script src="https://js.paystack.co/v1/inline.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.3.0/introjs.min.css">
   <noscript><div style="padding: 40px; font-size: 200%; text-align: center;">This site requires JavaScript. Please enable it in your browser settings.</div></noscript>
     
   <!-- Google Analytics -->
-    <script>
+  <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
     (function(w,d,s,g,js,fs){
-    g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
-    js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
-    js.src='https://apis.google.com/js/platform.js';
-    fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
+      g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
+      js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
+      js.src='https://apis.google.com/js/platform.js';
+      fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
     }(window,document,'script'));
-    </script>
+  </script>
   <!-- End Google Analytics -->
+
+  <!-- Load the JavaScript API client and Sign-in library. -->
+<script type="text/javascript" src="https://apis.google.com/js/client:platform.js"></script>
 
 </head>
