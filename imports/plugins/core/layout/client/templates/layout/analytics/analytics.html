@@ -182,6 +182,7 @@ function handleProfiles(response) {
 function queryCoreReportingApi(profileId) {
   // Query the Core Reporting API for the number sessions for
   // the past seven days.
+  let totalUsers, newUsers, currentUsers;
   gapi.client.analytics.data.ga.get({
     'ids': 'ga:' + profileId,
     'start-date': '7daysAgo',
@@ -190,20 +191,30 @@ function queryCoreReportingApi(profileId) {
     'dimensions': 'ga:country,ga:region,ga:operatingSystem,ga:deviceCategory'
   })
   .then(function(response) {
-    const totalUsers = parseInt(response.result.totalsForAllResults['ga:users'], 10);
-    const newUsers = parseInt(response.result.totalsForAllResults['ga:newUsers'], 10);
-    google.charts.setOnLoadCallback(drawChart(totalUsers, newUsers));
+    totalUsers = parseInt(response.result.totalsForAllResults['ga:users'], 10);
+    newUsers = parseInt(response.result.totalsForAllResults['ga:newUsers'], 10);
     console.log('API Response::::::', response.result);
     var formattedJson = JSON.stringify(response.result, null, 2);
     document.getElementById('query-output').value = formattedJson;
   })
+  .then(gapi.client.analytics.data.realtime.get({
+    'ids': 'ga:' + profileId,
+    'metrics': 'rt:activeUsers'
+  })
+  .then(function(res) {
+    currentUsers = parseInt(res.result.totalsForAllResults['rt:activeUsers'], 10);
+  })
+  )
   .then(null, function(err) {
       // Log any errors.
       console.log(err);
-  });
+  })
+  .then(function() {
+    google.charts.setOnLoadCallback(drawChart(totalUsers, newUsers, currentUsers));
+  })
 }
 
-function drawChart(totalUsers, newUsers) {
+function drawChart(totalUsers, newUsers, currentUsers) {
       // Create the data table.
     const data = new google.visualization.DataTable();
     data.addColumn("string", "Topping");
@@ -214,7 +225,7 @@ function drawChart(totalUsers, newUsers) {
     ]);
   // Set chart options
   const options = {
-    title: `Total Users: ${totalUsers}`,
+    title: `Total Users: ${totalUsers}  Online: ${currentUsers}`,
     width: 500,
     height: 400
   };
