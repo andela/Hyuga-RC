@@ -190,7 +190,9 @@ function queryCoreReportingApi(profileId) {
     'dimensions': 'ga:country,ga:region,ga:operatingSystem,ga:deviceCategory'
   })
   .then(function(response) {
-    google.charts.setOnLoadCallback(drawChart(10, 4));
+    const totalUsers = parseInt(response.result.totalsForAllResults['ga:users'], 10);
+    const newUsers = parseInt(response.result.totalsForAllResults['ga:newUsers'], 10);
+    google.charts.setOnLoadCallback(drawChart(totalUsers, newUsers));
     console.log('API Response::::::', response.result);
     var formattedJson = JSON.stringify(response.result, null, 2);
     document.getElementById('query-output').value = formattedJson;
