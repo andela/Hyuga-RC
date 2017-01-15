@@ -56,12 +56,16 @@
     <!--<div id="regions_div" style="width: 900px; height: 500px; float: left;"></div>-->
     <button id="auth-button" >Authorize</button>
 
-<h1>Hello Analytics</h1>
-
+<h1>Reaction Analytics</h1>
+<div id="chart_div"></div>
 <textarea cols="80" rows="20" id="query-output"></textarea>
 
 <script>
-
+  // Load the Visualization API and the corechart package.
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.load('upcoming', {'packages':['geochart']});
+  // Set a callback to run when the Google Visualization API is loaded.
+  // google.charts.setOnLoadCallback(drawRegionsMap);
   // Replace with your client ID from the developer console.
   var CLIENT_ID = '694098708996-6iha3kq8i9n6hb1n8178vs5ia3j64l5f.apps.googleusercontent.com';
 
@@ -182,9 +186,11 @@ function queryCoreReportingApi(profileId) {
     'ids': 'ga:' + profileId,
     'start-date': '7daysAgo',
     'end-date': 'today',
-    'metrics': 'ga:users,ga:sessions,ga:pageviews,ga:visits'
+    'metrics': 'ga:users,ga:newUsers,ga:sessions,ga:pageviews,ga:visits,ga:avgPageLoadTime,ga:transactions',
+    'dimensions': 'ga:country,ga:region,ga:operatingSystem,ga:deviceCategory'
   })
   .then(function(response) {
+    google.charts.setOnLoadCallback(drawChart(10, 4));
     console.log('API Response::::::', response.result);
     var formattedJson = JSON.stringify(response.result, null, 2);
     document.getElementById('query-output').value = formattedJson;
@@ -193,6 +199,26 @@ function queryCoreReportingApi(profileId) {
       // Log any errors.
       console.log(err);
   });
+}
+
+function drawChart(totalUsers, newUsers) {
+      // Create the data table.
+    const data = new google.visualization.DataTable();
+    data.addColumn("string", "Topping");
+    data.addColumn("number", "Slices");
+    data.addRows([
+      ["New Users", newUsers],
+      ["Returning Users", totalUsers - newUsers]
+    ]);
+  // Set chart options
+  const options = {
+    title: `Total Users: ${totalUsers}`,
+    width: 500,
+    height: 400
+  };
+  // Instantiate and draw our chart, passing in some options.
+  var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
 }
 
   // Add an event listener to the 'auth-button'.
