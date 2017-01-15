@@ -57,6 +57,8 @@
     <button id="auth-button" >Authorize</button>
 
 <h1>Reaction Analytics</h1>
+<h4 id="visits"></h4>
+<h4 id="pageViews"></h4>
 <div id="chart_div"></div>
 <textarea cols="80" rows="20" id="query-output"></textarea>
 
@@ -65,8 +67,6 @@
   google.charts.load('current', {'packages':['corechart']});
   google.charts.load('upcoming', {'packages':['geochart']});
   // Set a callback to run when the Google Visualization API is loaded.
-  // google.charts.setOnLoadCallback(drawRegionsMap);
-  // Replace with your client ID from the developer console.
   var CLIENT_ID = '694098708996-6iha3kq8i9n6hb1n8178vs5ia3j64l5f.apps.googleusercontent.com';
 
   // Set authorized scope.
@@ -193,7 +193,8 @@ function queryCoreReportingApi(profileId) {
   .then(function(response) {
     totalUsers = parseInt(response.result.totalsForAllResults['ga:users'], 10);
     newUsers = parseInt(response.result.totalsForAllResults['ga:newUsers'], 10);
-    console.log('API Response::::::', response.result);
+    document.getElementById('visits').innerHTML = `Visits: ${response.result.totalsForAllResults['ga:visits']}`;
+    document.getElementById('pageViews').innerHTML = `Page Views: ${response.result.totalsForAllResults['ga:pageviews']}`;
     var formattedJson = JSON.stringify(response.result, null, 2);
     document.getElementById('query-output').value = formattedJson;
   })
@@ -210,11 +211,31 @@ function queryCoreReportingApi(profileId) {
       console.log(err);
   })
   .then(function() {
-    google.charts.setOnLoadCallback(drawChart(totalUsers, newUsers, currentUsers));
+    google.charts.setOnLoadCallback(drawUserChart(totalUsers, newUsers, currentUsers));
   })
 }
 
-function drawChart(totalUsers, newUsers, currentUsers) {
+function drawUserChart(totalUsers, newUsers, currentUsers) {
+      // Create the data table.
+    const data = new google.visualization.DataTable();
+    data.addColumn("string", "Topping");
+    data.addColumn("number", "Slices");
+    data.addRows([
+      ["New Users", newUsers],
+      ["Returning Users", totalUsers - newUsers]
+    ]);
+  // Set chart options
+  const options = {
+    title: `Total Users: ${totalUsers}  Online: ${currentUsers}`,
+    width: 500,
+    height: 400
+  };
+  // Instantiate and draw our chart, passing in some options.
+  var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
+}
+
+function drawOsChart(totalUsers, newUsers, currentUsers) {
       // Create the data table.
     const data = new google.visualization.DataTable();
     data.addColumn("string", "Topping");
@@ -237,6 +258,4 @@ function drawChart(totalUsers, newUsers, currentUsers) {
   // Add an event listener to the 'auth-button'.
   document.getElementById('auth-button').addEventListener('click', authorize);
 </script>
-
-<!--<script src="https://apis.google.com/js/client.js?onload=authorize"></script>-->
 </template>
