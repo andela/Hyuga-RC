@@ -235,12 +235,13 @@ export default {
   },
 
   setActionView(viewData) {
+    console.log(viewData);
     if (viewData) {
       Session.set("admin/actionView", viewData);
     } else {
       const registryItem = this.getRegistryForCurrentRoute(
         "settings");
-
+      console.log(registryItem);
       if (registryItem) {
         this.setActionView(registryItem);
       } else {
