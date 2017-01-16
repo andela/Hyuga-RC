@@ -15,17 +15,19 @@
 </select>
 <button id="auth-button" >Show Analysis</button>
 
-<h1>Analytics</h1>
-<h4 id="visits"></h4>
-<h4 id="pageViews"></h4>
-<div id="users" style="float: left">
-  <h5><strong>Users</strong></h5>
-  <div id="chart_div" style="min-width: 500px; min-height: 400px;"></div>
-</div>
-<!--<textarea cols="80" rows="20" id="query-output"></textarea>-->
-<div id="topcountry" style="float: right">
- <h5><strong>Top Countries</strong></h5>
- <div id="country_chart" style="width: 500px; height: 400px;"></div>
+<div id="displayAnalysis" hidden>
+  <h1>Analytics</h1>
+  <h4 id="visits"></h4>
+  <h4 id="pageViews"></h4>
+  <div id="users" style="float: left">
+    <h5><strong>Users</strong></h5>
+    <div id="chart_div" style="min-width: 500px; min-height: 400px;"></div>
+  </div>
+  <!--<textarea cols="80" rows="20" id="query-output"></textarea>-->
+  <div id="topcountry" style="float: right">
+  <h5><strong>Top Countries</strong></h5>
+  <div id="country_chart" style="width: 500px; height: 400px;"></div>
+  </div>
 </div>
 
 <script>
@@ -51,12 +53,14 @@
 
     gapi.auth.authorize(authData, function(response) {
       const authButton = document.getElementById('auth-button');
+      const displayAnalysis = document.getElementById('displayAnalysis');
       if (response.error) {
         authButton.hidden = false;
       }
       else {
         authButton.hidden = true;
         queryAccounts();
+        displayAnalysis.hidden = false;
       }
     });
   }
