@@ -4,6 +4,7 @@ import { Logger } from "/client/api";
 import { getCardType } from "/client/modules/core/helpers/globals";
 import { Cart, Shops } from "/lib/collections";
 import { AutoForm } from "meteor/aldeed:autoform";
+import { Reaction } from "/client/api";
 import { AuthNetPayment } from "../../lib/collections/schemas";
 import { AuthNet } from "../api";
 
@@ -68,7 +69,7 @@ AutoForm.addHooks("authnet-payment-form", {
     };
     const paymentInfo = {
       total: Cart.findOne().cartTotal(),
-      currency: Shops.findOne().currency
+      currency: Shops.findOne({_id: Reaction.getShopId}).currency
     };
 
     // Submit for processing

@@ -70,7 +70,7 @@ Template.walletPayment.events({
       Alerts.toast("Insufficient balance", "error");
       return false;
     }
-    const currency = Shops.findOne().currency;
+    const currency = Shops.findOne({_id: Reaction.getShopId}).currency;
     transactionId = Random.id();
     Meteor.call("wallet/transaction", Meteor.userId(), {
       amount: cartAmount,

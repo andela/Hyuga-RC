@@ -1,5 +1,6 @@
 import { Shops } from "/lib/collections";
 import { Session } from "meteor/session";
+import { Reaction } from "/client/api";
 import { Template } from "meteor/templating";
 
 /**
@@ -9,7 +10,7 @@ import { Template } from "meteor/templating";
 Template.CoreNavigationLanguage.helpers({
   languages: function () {
     const languages = [];
-    const shop = Shops.findOne();
+    const shop = Shops.findOne({_id: Reaction.getShopId});
     if (typeof shop === "object" && shop.languages) {
       for (const language of shop.languages) {
         if (language.enabled === true) {
