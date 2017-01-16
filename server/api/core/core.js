@@ -10,6 +10,7 @@ import { sendVerificationEmail } from "./accounts";
 import { getMailUrl } from "./email/config";
 
 export default {
+  defaultId: "J8Bhq3uTtdgwZx3rz",
 
   init() {
     // run onCoreInit hooks
@@ -134,7 +135,7 @@ export default {
   getCurrentShopCursor() {
     const domain = this.getDomain();
     const cursor = Shops.find({
-      domains: domain
+      _id: this.defaultId
     }, {
       limit: 1
     });
@@ -156,7 +157,7 @@ export default {
 
   getShopId() {
     const domain = this.getDomain();
-    const shop = Shops.find({ domains: domain }, {
+    const shop = Shops.find({ _id: this.defaultId }, {
       limit: 1,
       fields: { _id: 1 }
     }).fetch()[0];
@@ -175,7 +176,7 @@ export default {
 
   getShopName() {
     const domain = this.getDomain();
-    const shop = Shops.find({ domains: domain }, {
+    const shop = Shops.find({ _id: this.defaultId }, {
       limit: 1,
       fields: { name: 1 }
     }).fetch()[0];
