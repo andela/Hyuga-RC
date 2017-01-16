@@ -8,7 +8,7 @@ Template.i18nChooser.helpers({
   languages() {
     const languages = [];
     if (Reaction.Subscriptions.Shops.ready() && Meteor.user()) {
-      const shop = Shops.findOne({_id: Reaction.getShopId});
+      const shop = Shops.findOne({_id: Reaction.getShopId()});
       if (typeof shop === "object" && shop.languages) {
         for (const language of shop.languages) {
           if (language.enabled === true) {

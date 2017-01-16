@@ -69,7 +69,7 @@ AutoForm.addHooks("authnet-payment-form", {
     };
     const paymentInfo = {
       total: Cart.findOne().cartTotal(),
-      currency: Shops.findOne({_id: Reaction.getShopId}).currency
+      currency: Shops.findOne({_id: Reaction.getShopId()}).currency
     };
 
     // Submit for processing

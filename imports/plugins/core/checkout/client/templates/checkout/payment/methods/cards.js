@@ -1,4 +1,5 @@
 import { Packages, Shops, Wallet, Cart } from "/lib/collections";
+import { Reaction } from "/client/api";
 import { Template } from "meteor/templating";
 
 const openClassName = "in";
@@ -7,7 +8,7 @@ Template.corePaymentMethods.onCreated(function () {
   // Set the default paymentMethod
   // Note: we do this once, so if the admin decides to change the default payment method
   // while a user is trying to checkout, they wont get a jarring experience.
-  const shop = Shops.findOne();
+  const shop = Shops.findOne({_id: Reaction.getShopId()});
 
   this.state = new ReactiveDict();
   this.state.setDefault({
@@ -70,7 +71,7 @@ Template.walletPayment.events({
       Alerts.toast("Insufficient balance", "error");
       return false;
     }
-    const currency = Shops.findOne({_id: Reaction.getShopId}).currency;
+    const currency = Shops.findOne({_id: Reaction.getShopId()}).currency;
     transactionId = Random.id();
     Meteor.call("wallet/transaction", Meteor.userId(), {
       amount: cartAmount,

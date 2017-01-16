@@ -67,7 +67,7 @@ AutoForm.addHooks("stripe-payment-form", {
     const storedCard = cardData.type.charAt(0).toUpperCase() + cardData.type.slice(1) + " " + doc.cardNumber.slice(-4);
     Stripe.authorize(cardData, {
       total: Cart.findOne().cartTotal(),
-      currency: Shops.findOne({_id: Reaction.getShopId}).currency
+      currency: Shops.findOne({_id: Reaction.getShopId()}).currency
     }, function (error, transaction) {
       submitting = false;
       if (error) {

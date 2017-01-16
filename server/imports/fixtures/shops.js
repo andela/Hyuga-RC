@@ -1,9 +1,10 @@
 import faker from "faker";
 import { Shops } from "/lib/collections";
+import { Reaction } from "/client/api";
 
 export function getShop() {
   createShopFactory();
-  const existingShop = Shops.findOne({_id: Reaction.getShopId});
+  const existingShop = Shops.findOne({_id: Reaction.getShopId()});
   return existingShop || Factory.create("shop");
 }
 

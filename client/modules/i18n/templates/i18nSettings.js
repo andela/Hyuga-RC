@@ -8,7 +8,7 @@ import { Template } from "meteor/templating";
 Template.i18nSettings.helpers({
   shop() {
     if (Reaction.Subscriptions.Shops.ready()) {
-      return Shops.findOne({_id: Reaction.getShopId});
+      return Shops.findOne({_id: Reaction.getShopId()});
     }
     return null;
   },
