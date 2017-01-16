@@ -15,7 +15,7 @@ import { Router } from "/client/modules/router";
  * Global reaction shop permissions methods and shop initialization
  */
 export default {
-  shopId: null,
+  shopId: "J8Bhq3uTtdgwZx3rz",
 
   Locale: new ReactiveVar({}),
 
@@ -28,7 +28,7 @@ export default {
       if (this.Subscriptions.Shops.ready()) {
         domain = Meteor.absoluteUrl().split("/")[2].split(":")[0];
         shop = Shops.findOne({
-          domains: domain
+          _id: this.shopId
         });
 
         if (shop) {

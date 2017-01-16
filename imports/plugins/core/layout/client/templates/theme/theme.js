@@ -7,7 +7,7 @@ Meteor.startup(() => {
   Tracker.autorun(() => {
     const subscription = Reaction.Subscriptions.Shops;
     if (subscription.ready()) {
-      const shop = Shops.findOne({});
+      const shop = Shops.findOne({_id: Reaction.getShopId});
 
       if (shop) {
         if (shop.theme) {

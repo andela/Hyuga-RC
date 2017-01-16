@@ -14,7 +14,7 @@ Template.addressBookForm.helpers({
   },
   statesForCountry: function () {
     let locale;
-    const shop = Collections.Shops.findOne();
+    const shop = Collections.Shops.findOne({_id: Reaction.getShopId});
     const selectedCountry = Session.get("addressBookCountry") || AutoForm.getFieldValue("country");
     if (!selectedCountry) {
       return false;

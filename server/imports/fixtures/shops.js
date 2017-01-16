@@ -3,7 +3,7 @@ import { Shops } from "/lib/collections";
 
 export function getShop() {
   createShopFactory();
-  const existingShop = Shops.findOne();
+  const existingShop = Shops.findOne({_id: Reaction.getShopId});
   return existingShop || Factory.create("shop");
 }
 
