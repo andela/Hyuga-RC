@@ -1,7 +1,7 @@
 /* eslint camelcase: 0 */
 import { Meteor } from "meteor/meteor";
 import { Template } from "meteor/templating";
-import { Reaction } from "client/api";
+import { Reaction } from "/client/api";
 import { getCardType } from "/client/modules/core/helpers/globals";
 import { Cart, Shops } from "/lib/collections";
 import { Braintree } from "../api/braintree";
