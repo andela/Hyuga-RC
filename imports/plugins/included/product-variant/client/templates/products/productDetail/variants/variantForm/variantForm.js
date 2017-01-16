@@ -9,7 +9,6 @@ import { Products } from "/lib/collections";
 Template.variantForm.onCreated(function () {
   this.autorun(() => {
     const productHandle = Reaction.Router.getParam("handle");
-    console.log(productHandle);
     if (!productHandle) {
       Reaction.clearActionView();
     }

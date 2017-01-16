@@ -7,6 +7,7 @@ import { Reaction } from "/server/api";
 
 Meteor.publish("Shipping", function () {
   const shopId = Reaction.getShopId();
+  console.log(shopId);
   if (!shopId) {
     return this.ready();
   }
