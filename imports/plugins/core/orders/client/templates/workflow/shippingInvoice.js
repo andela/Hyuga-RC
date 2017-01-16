@@ -27,7 +27,7 @@ Template.coreOrderShippingInvoice.onCreated(function () {
   this.autorun(() => {
     const currentData = Template.currentData();
     const order = Orders.findOne(currentData.orderId);
-    const shop = Shops.findOne({});
+    const shop = Shops.findOne({_id: Reaction.getShopId()});
 
     this.state.set("order", order);
     this.state.set("currency", shop.currencies[shop.currency]);

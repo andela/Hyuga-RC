@@ -101,7 +101,7 @@ Template.orders.onCreated(function () {
 
   // Watch for updates to shop collection
   this.autorun(() => {
-    const shop = Shops.findOne({});
+    const shop = Shops.findOne({_id: Reaction.getShopId()});
 
     // Update currency information, this is passed to child components containing
     // Numeric inputs

@@ -115,7 +115,7 @@ Template.customTaxRates.helpers({
     return Countries.find().fetch();
   },
   statesForCountry: function () {
-    const shop = Shops.findOne();
+    const shop = Shops.findOne({_id: Reaction.getShopId()});
     const selectedCountry = AutoForm.getFieldValue("country");
     if (!selectedCountry) {
       return false;
@@ -138,7 +138,7 @@ Template.customTaxRates.helpers({
     return options;
   },
   taxRate() {
-    const shop = Shops.findOne();
+    const shop = Shops.findOne({_id: Reaction.getShopId()});
     const instance = Template.instance();
     const id = instance.state.get("editingId");
     const tax = Taxes.findOne(id) || {};
