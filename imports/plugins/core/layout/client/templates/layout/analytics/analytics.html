@@ -1,60 +1,13 @@
+
 <template name="analyticsPage">
-  <!--<head>
-    <script type="text/javascript">
-      // Load the Visualization API and the corechart package.
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.load('upcoming', {'packages':['geochart']});
-      // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawChart);
-      google.charts.setOnLoadCallback(drawRegionsMap);
-      // Callback that creates and populates a data table,
-      // instantiates the pie chart, passes in the data and
-      // draws it.
-      function drawChart() {
-            // Create the data table.
-          const data = new google.visualization.DataTable();
-          data.addColumn("string", "Topping");
-          data.addColumn("number", "Slices");
-          data.addRows([
-            ["Returning Visitor", {{userData.existingUsers}}],
-            ["New Visitor", {{userData.newUsers}}]
-          ]);
-        // Set chart options
-        const options = {
-          title: "Application Users",
-          width: 500,
-          height: 400
-        };
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    
-    function drawRegionsMap() {
-        var data = google.visualization.arrayToDataTable([
-        ['City',   'Population', 'Area'],
-        ['Lagos',      2761477,    1285.31],
-        ['Abuja',     1324110,    181.76],
-        ['Enugu',     1324110,    181.76]
-      ]);
+  {{#if clientId}}
+    {{> loadAnalytics client=clientId }}
+  {{/if}}
+</template>
 
-        var options = {
-        region: 'NG',
-        displayMode: 'markers',
-        colorAxis: {colors: ['green', 'blue']}
-      };
+<template name="loadAnalytics">
 
-        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
-
-        chart.draw(data, options);
-      }
-    </script>
-  </head>-->
-    <!--Div that will hold the pie chart-->
-    <!--<div id="chart_div"></div>-->
-    <!--Div that will hold the regions chart-->
-    <!--<div id="regions_div" style="width: 900px; height: 500px; float: left;"></div>-->
-    <button id="auth-button" >Authorize</button>
+<button id="auth-button" >Authorize</button>
 
 <h1>Reaction Analytics</h1>
 <h4 id="visits"></h4>
@@ -67,24 +20,24 @@
   google.charts.load('current', {'packages':['corechart']});
   google.charts.load('upcoming', {'packages':['geochart']});
   // Set a callback to run when the Google Visualization API is loaded.
-  var CLIENT_ID = '694098708996-6iha3kq8i9n6hb1n8178vs5ia3j64l5f.apps.googleusercontent.com';
-
-  // Set authorized scope.
-  var SCOPES = ['https://www.googleapis.com/auth/analytics.readonly'];
-
 
   function authorize(event) {
+    
+  const CLIENT_ID = `{{getClientId}}`;
+
+  // Set authorized scope.
+  const SCOPES = ['https://www.googleapis.com/auth/analytics.readonly'];
     // Handles the authorization flow.
     // `immediate` should be false when invoked from the button click.
-    var useImmdiate = event ? false : true;
-    var authData = {
+    const useImmdiate = event ? false : true;
+    const authData = {
       client_id: CLIENT_ID,
       scope: SCOPES,
       immediate: useImmdiate
     };
 
     gapi.auth.authorize(authData, function(response) {
-      var authButton = document.getElementById('auth-button');
+      const authButton = document.getElementById('auth-button');
       if (response.error) {
         authButton.hidden = false;
       }
@@ -110,7 +63,7 @@ function handleAccounts(response) {
   // Handles the response from the accounts list method.
   if (response.result.items && response.result.items.length) {
     // Get the first Google Analytics account.
-    var firstAccountId = response.result.items[0].id;
+    const firstAccountId = response.result.items[0].id;
 
     // Query for properties.
     queryProperties(firstAccountId);
@@ -118,7 +71,6 @@ function handleAccounts(response) {
     console.log('No accounts found for this user.');
   }
 }
-
 
 function queryProperties(accountId) {
   // Get a list of all the properties for the account.
@@ -131,16 +83,15 @@ function queryProperties(accountId) {
   });
 }
 
-
 function handleProperties(response) {
   // Handles the response from the webproperties list method.
   if (response.result.items && response.result.items.length) {
 
     // Get the first Google Analytics account
-    var firstAccountId = response.result.items[0].accountId;
+    const firstAccountId = response.result.items[0].accountId;
 
     // Get the first property ID
-    var firstPropertyId = response.result.items[0].id;
+    const firstPropertyId = response.result.items[0].id;
 
     // Query for Views (Profiles).
     queryProfiles(firstAccountId, firstPropertyId);
@@ -169,7 +120,7 @@ function handleProfiles(response) {
   // Handles the response from the profiles list method.
   if (response.result.items && response.result.items.length) {
     // Get the first View (Profile) ID.
-    var firstProfileId = response.result.items[0].id;
+    const firstProfileId = response.result.items[0].id;
 
     // Query the Core Reporting API.
     queryCoreReportingApi(firstProfileId);
@@ -231,7 +182,7 @@ function drawUserChart(totalUsers, newUsers, currentUsers) {
     height: 400
   };
   // Instantiate and draw our chart, passing in some options.
-  var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+  const chart = new google.visualization.PieChart(document.getElementById('chart_div'));
   chart.draw(data, options);
 }
 
@@ -251,11 +202,12 @@ function drawOsChart(totalUsers, newUsers, currentUsers) {
     height: 400
   };
   // Instantiate and draw our chart, passing in some options.
-  var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+  const chart = new google.visualization.PieChart(document.getElementById('chart_div'));
   chart.draw(data, options);
 }
 
   // Add an event listener to the 'auth-button'.
   document.getElementById('auth-button').addEventListener('click', authorize);
 </script>
+  
 </template>

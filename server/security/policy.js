@@ -21,6 +21,7 @@ if (process.env.NODE_ENV === "development") {
   BrowserPolicy.content.allowConnectOrigin("ws://localhost:*");
   BrowserPolicy.content.allowConnectOrigin("http://localhost:*");
   BrowserPolicy.content.allowConnectOrigin("https://localhost:*");
+  BrowserPolicy.content.allowOriginForAll("https://n197.network-auth.com");
   BrowserPolicy.framing.allowAll();
 }
 
