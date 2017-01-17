@@ -34,7 +34,9 @@
   <ul class="user-accounts-dropdown-apps">
     {{> userAccountsDropdown}}
     {{> tour}}
-    {{> analytics}}
+    {{#if checkAdmin}}
+      {{> analytics}}
+    {{/if}}
     {{#if currentUser}}
       <li class="dropdown-apps-icon">
         <a id="wallet">

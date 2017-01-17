@@ -4,6 +4,15 @@ import { Session } from "meteor/session";
 import { Meteor } from "meteor/meteor";
 import { Template } from "meteor/templating";
 
+Template.accountsDropdownApps.helpers({
+  /**
+   * Check if the user is an admin.
+   * @returns boolean
+   */
+  checkAdmin() {
+    return Reaction.hasPermission("admin");
+  }
+});
 Template.loginDropdown.events({
 
   /**

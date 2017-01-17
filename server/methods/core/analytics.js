@@ -6,9 +6,8 @@ import * as Collections from "/lib/collections";
  */
 Meteor.methods({
   /**
-   * shop/getShopId
-   * @param {string} userId: id of the logged in user
-   * @return {object} shop details
+   * packages/getAnalyticsData
+   * @return {object} package details
    */
   "packages/getAnalyticsData": function () {
     return Collections.Packages.findOne({ name: "reaction-analytics" });
