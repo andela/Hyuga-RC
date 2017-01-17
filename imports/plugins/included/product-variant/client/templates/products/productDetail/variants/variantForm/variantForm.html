@@ -50,7 +50,20 @@
           {{/if}}
         </div>
       </div>
-      
+      <div class="panel-body">
+        {{#autoForm
+          schema=Schemas.ProductVariant
+          doc=.
+          type="method"
+          meteormethod="products/updateVariant"
+          id=variantFormId
+          validation="keyup"
+          resetOnSuccess=false
+          autosave=true
+        }}
+        
+        {{>afFieldInput name="_id" type="hidden"}}
+        {{/autoForm}}
       </div> {{!-- END panel-body --}}
     </div>
 
