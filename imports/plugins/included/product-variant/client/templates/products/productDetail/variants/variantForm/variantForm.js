@@ -15,7 +15,9 @@ Template.variantForm.onCreated(function () {
   });
 
   this.getVariant = (variant) => {
+    console.log(variant);
     const product = Products.findOne(variant._id);
+    console.log(product);
     return applyProductRevision(product);
   };
 });

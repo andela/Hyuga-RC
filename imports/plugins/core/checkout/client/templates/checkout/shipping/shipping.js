@@ -9,11 +9,9 @@ import { Template } from "meteor/templating";
 // until we handle multiple methods, we just use the first
 function cartShippingMethods(currentCart) {
   const cart = currentCart || Cart.findOne();
-  console.log(cart);
   if (cart) {
     if (cart.shipping) {
       if (cart.shipping[0].shipmentQuotes) {
-        console.log(cart.shipping[0].shipmentQuotes);
         return cart.shipping[0].shipmentQuotes;
       }
     }
