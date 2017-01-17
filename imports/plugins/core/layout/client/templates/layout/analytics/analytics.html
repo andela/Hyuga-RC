@@ -6,14 +6,14 @@
 </template>
 
 <template name="loadAnalytics">
-
+<span> Showing Report for: </span>
 <select id="analysis_limit" style="width: 100px; margin-left: 5px;">
   <option value="1">1 day</option>
   <option value="7">7 days</option>
   <option value="14">14 days</option>
   <option value="30">30 days</option>
 </select>
-<button id="auth-button">Show Analysis</button>
+<button id="auth-button" hidden>Show Analysis</button>
 
 <div id="displayAnalysis" hidden>
   <h1>Analytics</h1>
@@ -28,6 +28,9 @@
   <div id="country_chart"></div>
   </div>
 </div>
+
+  <!-- Load the JavaScript API client and Sign-in library. -->
+<script type="text/javascript" src="https://apis.google.com/js/client:platform.js?onload=authorize"></script>
 
 <script>
   // Load the Visualization API and the chart package.
@@ -194,8 +197,8 @@ function queryCoreReportingApi(profileId) {
 function drawUserChart(totalUsers, newUsers, currentUsers) {
       // Create the data table.
     const data = new google.visualization.DataTable();
-    data.addColumn("string", "Topping");
-    data.addColumn("number", "Slices");
+    data.addColumn("string", "Name");
+    data.addColumn("number", "Number");
     data.addRows([
       ["New Users", newUsers],
       ["Returning Users", totalUsers - newUsers]
