@@ -2,112 +2,56 @@ import _ from "lodash";
 import { Meteor } from "meteor/meteor";
 import { check, Match } from "meteor/check";
 import { Reaction, Logger } from "/server/api";
-import { EJSON } from "meteor/ejson";
 import { ProductSearch, OrderSearch, AccountSearch } from "/lib/collections";
 
 const supportedCollections = ["products", "orders", "accounts"];
-function checkPriceRange(priceRange, shopId, searchTerm) {
-  let findTerm = {};
-  switch (priceRange) {
-    case "below-10":
-      findTerm = {
-        "price.min": { $gt: 0.00 },
-        "price.max": { $lt: 10.00 },
-        shopId: shopId,
-        $text: { $search: searchTerm }
-      };
-      break;
-    case "10-55":
-      findTerm = {
-        "price.min": { $gt: 10.00 },
-        "price.max": { $lt: 55.00 },
-        shopId: shopId,
-        $text: { $search: searchTerm }
-      };
-      break;
-    case "55-100":
-      findTerm = {
-        "price.min": { $gt: 55.00 },
-        "price.max": { $lt: 100.00 },
-        shopId: shopId,
-        $text: { $search: searchTerm }
-      };
-      break;
-    case "100-500":
-      findTerm = {
-        "price.min": { $gt: 100.00 },
-        "price.max": { $lt: 500.00 },
-        shopId: shopId,
-        $text: { $search: searchTerm }
-      };
-      break;
-    case "500-1000":
-      findTerm = {
-        "price.min": { $gt: 500.00 },
-        "price.max": { $lt: 1000.00 },
-        shopId: shopId,
-        $text: { $search: searchTerm }
-      };
-      break;
-    case "1000-above":
-      findTerm = {
-        "price.min": { $gt: 1000.00 },
-        "price.max": { $lt: 10000000.00 },
-        shopId: shopId,
-        $text: { $search: searchTerm }
-      };
-      break;
-    default:
-      findTerm = {
-        shopId: shopId,
-        $text: { $search: searchTerm }
-      };
+const priceRanges = {
+  "below-10": [ 0.00, 10.00 ],
+  "10-55": [ 10.00, 55.00 ],
+  "55-100": [ 55.00, 100.00 ],
+  "100-500": [ 100.00, 500.00 ],
+  "500-1000": [ 500.00, 1000.00 ],
+  "1000-above": [ 1000.00, 10000000.00 ]
+};
+
+function getProductFindTerm(searchTerm, searchTags, priceRange, brand, userId) {
+  const shopId = Reaction.getShopId();
+
+  const textMatcher = {
+    $regex: searchTerm,
+    $options: "i"
+  };
+
+  const findTerm = {
+    $or: [
+      { title: textMatcher },
+      { hashtags: textMatcher },
+      { description: textMatcher },
+      { handle: textMatcher }
+    ]
+  };
+
+  if (typeof priceRange === "string" && priceRange.length > 4) {
+    const range = priceRanges[priceRange];
+
+    if (range) {
+      findTerm["price.min"] = { $gt: range[0] };
+      findTerm["price.max"] = { $lt: range[1] };
+    }
   }
 
-  return findTerm;
-}
-function getProductFindTerm(searchTerm, searchTags, priceRange, brandPicked, userId) {
-  const shopId = Reaction.getShopId();
-  const findTerm = checkPriceRange(priceRange, shopId, searchTerm);
-  if (searchTags.length > 0) {
-  const findTerm = {
-    $and: [
-      { shopId: shopId },
-      { $or: [
-        { title: {
-          $regex: searchTerm,
-          $options: "i"
-        } },
-        { hashtags: {
-          $regex: searchTerm,
-          $options: "i"
-        } },
-        { description: {
-          $regex: searchTerm,
-          $options: "i"
-        } },
-        { handle: {
-          $regex: searchTerm,
-          $options: "i"
-        } },
-        { price: {
-          $regex: searchTerm,
-          $options: "i"
-        } }
-      ] }
-    ]};
+  if (typeof brand === "string" && brand.length > 1) {
+    findTerm.brand = brand;
   }
+
   if (searchTags.length) {
     findTerm.hashtags = {$all: searchTags};
   }
-  if (typeof brandPicked === "string") {
-    if (brandPicked.length > 1) {
-      findTerm.brand = brandPicked;
-    }
-  }
+
   if (!Roles.userIsInRole(userId, ["admin", "owner"], shopId)) {
     findTerm.isVisible = true;
   }
+
   return findTerm;
 }
 
