@@ -188,14 +188,12 @@ Meteor.methods({
   "orders/cancelOrder"(order) {
     check(order, Object);
 
-    return Orders.update(order._id, {
-      $set: {
-        "workflow.status": "canceled"
-      },
-      $addToSet: {
-        "workflow.workflow": "coreOrderWorkflow/canceled"
-      }
+    const isCanceled = Orders.update(order._id, {
+      $set: { "workflow.status": "canceled" },
+      $addToSet: { "workflow.workflow": "coreOrderWorkflow/canceled" }
     });
+
+    return isCanceled ? Meteor.call("wallet/refund", order) : isCanceled;
   },
 
   /**
@@ -214,18 +212,13 @@ Meteor.methods({
       throw new Meteor.Error(403, "Access Denied");
     }
 
-    // TODO: Refund order
-    return Orders.update(order._id, {
-      $set: {
-        "workflow.status": "canceled"
-      },
-      $push: {
-        comments: newComment
-      },
-      $addToSet: {
-        "workflow.workflow": "coreOrderWorkflow/canceled"
-      }
+    const isCanceled = Orders.update(order._id, {
+      $set: { "workflow.status": "canceled" },
+      $push: { comments: newComment },
+      $addToSet: { "workflow.workflow": "coreOrderWorkflow/canceled" }
     });
+
+    return isCanceled ? Meteor.call("wallet/refund", order) : isCanceled;
   },
 
   /**
