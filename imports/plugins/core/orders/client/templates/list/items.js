@@ -1,7 +1,23 @@
 import { Template } from "meteor/templating";
 import { Media } from "/lib/collections";
 import { NumericInput } from "/imports/plugins/core/ui/client/components";
+import { Reaction } from "/client/api";
 
+
+Template.ordersListItems.onCreated(function () {
+  this.shopId = ReactiveVar();
+
+  this.autorun(() => {
+    if (Reaction.hasPermission("Admin")) {
+      this.shopId.set(Reaction.getShopId());
+    } else if (Reaction.hasPermission("createProduct")) {
+      const instance = this;
+      Meteor.call("shop/getShopId", Meteor.userId(), (err, res) => {
+        instance.shopId.set(res._id);
+      });
+    }
+  });
+});
 /**
  * ordersListItems helpers
  *
@@ -30,10 +46,12 @@ Template.ordersListItems.helpers({
     const { order } = Template.instance().data;
     const combinedItems = [];
 
-
     if (order) {
       // Lopp through all items in the order. The items are split into indivital items
       for (const orderItem of order.items) {
+        if (orderItem.shopId !== Template.instance().shopId.get()) {
+          continue;
+        }
         // Find an exising item in the combinedItems array
         const foundItem = combinedItems.find((combinedItem) => {
           // If and item variant exists, then we return true

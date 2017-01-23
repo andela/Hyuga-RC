@@ -9,6 +9,7 @@ Template.reactionAnalyticsSettings.helpers({
   },
   googleAnalyticsEnabled() {
     return typeof ga === "function";
+    // return true;
   },
   segmentioEnabled() {
     return typeof analytics === "object";

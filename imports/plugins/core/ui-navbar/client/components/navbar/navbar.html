@@ -1,4 +1,40 @@
 
+<template  name="notificationDropdown">
+  <div class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000">
+    <i class="{{NotificationIcon}}"></i>
+    <span class="caret"></span>
+  </div>
+  {{#if checkNotification}}
+    {{> dropDownNotifications}}
+  {{/if}}
+</template>
+
+<template name="dropDownNotifications">
+  <div class="dropdown-menu" role="menu">
+   <div class="user-notifications-dropdown">
+     <div class="user-notifications-dropdown-content">
+      {{> DropdownApps}}
+    </div>
+    <li class="divider"></li>
+    <div class="btn btn-primary btn-block" id="clearNotifications">Clear All</div>
+   </div>
+  </div>
+</template>
+
+<template name="DropdownApps">
+    <ul class="user-notifications-dropdown-apps">
+      {{> notificationItem}}
+    </ul>
+</template>
+
+<template name="notificationItem">
+    {{#each notification in showNotification}}
+      <li class="dropdown-apps-icon">
+        {{notification.message}}
+      </li>
+    {{/each}}
+</template>
+
 <template name="CoreNavigationBar">
   <div class="rui navbar">
     <div class="showmenu">{{> button icon="bars" onClick=onMenuButtonClick}}</div>
@@ -6,11 +42,12 @@
     <div class="menu">
       {{> tagNav tagNavProps}}
     </div>
-    
-    <div class="search">{{> React IconButtonComponent}}</div>
-    <div class="languages hidden-xs">{{> i18nChooser}}</div>
-    <div class="accounts">{{> accounts tpl="loginDropdown"}}</div>
-    <div class="cart">{{> cartIcon}}</div>
+    <div class="notificationsList"></div>
+    <div class="notifications" data-step="4" data-intro="Notifications">{{> note tpl="notificationDropdown"}}</div>
+    <div class="search" data-step="4" data-intro="Do a Quick Search">{{> React IconButtonComponent}}</div>
+    <div class="languages hidden-xs" data-step="5" data-intro="Choose Preferred Language">{{> i18nChooser}}</div>
+    <div class="accounts" data-step="6" data-intro="Access Quick Drop-down for Site Shortcuts">{{> accounts tpl="loginDropdown"}}</div>
+    <div class="cart" data-step="7" data-intro="See Your Cart Contents" data-position="auto">{{> cartIcon}}</div>
     <div class="cart-alert">{{> cartPanel}}</div>
   </div>
 </template>

@@ -4,7 +4,6 @@
     <span class="product-grid-item-alerts">
       {{> inlineAlerts placement="productGridItem" id=_id}}
     </span>
-
     <a class="product-grid-item-images"
       href="{{pdpPath}}"
       data-event-category="grid"
@@ -31,8 +30,9 @@
         {{/if}}
       {{/if}}
     </a>
-
-    {{> gridControls controlProps}}
+    {{#if isProductCreator}}
+      {{> gridControls controlProps}}
+    {{/if}}
     {{> gridContent}}
   </li>
 </template>

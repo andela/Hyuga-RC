@@ -1,18 +1,73 @@
 <template name="searchResults">
 
-  <div class="rui search-modal-results-container">
-    <div class="rui search-modal-results">
-      {{#if productSearchResults}}
-        {{> productResults productSearchResults=productSearchResults}}
-      {{/if}}
+  <style>
+    .no-result {
+      overflow:auto !important;
+      height:500px !important;
+    }
+    .filter-panel {
+      border:1px solid #e6e6e6 !important;
+      width:250px;
+      margin-top:20px;
+    };
+     .panel-heading .filter-panel-heading {
+      background:#ebebeb !important;
+    }
+    .panel-default .panel-title {
+      font-size:13px !important;
+    }
+  </style>
 
-      {{#if orderSearchResults}}
-        {{> orderResults orderSearchResults=orderSearchResults orderTable=orderTable}}
-      {{/if}}
+  <div class="row">
+    <div class="col-md-2" style="padding-left:30px;">
+        <div class="filter-panel">
+          <div class="panel panel-default" style="margin-bottom:0px">
+            <div class="panel-heading" style="background:#ebebeb;">
+              <div class="panel-title">Filter By Price</div>
+            </div>
+            <div class="panel-body">
+                {{> select options=priceOptions typeOf="priceOption"}}
+            </div>
+          </div>
+          <div class="panel panel-default" style="margin-bottom:0px">
+            <div class="panel-heading" style="background:#ebebeb;">
+              <div class="panel-title">Sort By Bestselling</div>
+            </div>
+            <div class="panel-body">
+                {{> select options=bestSellers typeOf="bestSeller"}}
+            </div>
+          </div>
+          <div class="panel panel-default" style="margin-bottom:0px">
+            <div class="panel-heading" style="background:#ebebeb;">
+              <div class="panel-title">Filter By Brand</div>
+            </div>
+            <div class="panel-body">
+              {{> select options=brands typeOf="brandOption"}}
+            </div>
+          </div>
+        </div>
+    </div>
 
-      {{#if accountSearchResults}}
-        {{> accountResults accountSearchResults=accountSearchResults accountTable=accountTable}}
-      {{/if}}
+    <div class="col-md-10">
+      <div class="rui search-modal-results-container">
+        {{#if productSearchResults}}
+            <div class="rui search-modal-results">
+            {{> productResults productSearchResults=productSearchResults}}
+            </div>
+          {{else}}
+            <div class="rui search-modal-results no-result">
+              <h1 class="text-center" style="margin-top:60px;">No results</h1>
+            </div>
+          {{/if}}
+        
+          {{#if orderSearchResults}}
+            {{> orderResults orderSearchResults=orderSearchResults orderTable=orderTable}}
+          {{/if}}
+
+          {{#if accountSearchResults}}
+            {{> accountResults accountSearchResults=accountSearchResults accountTable=accountTable}}
+          {{/if}}
+      </div>
     </div>
   </div>
 

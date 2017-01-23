@@ -21,6 +21,7 @@ if (process.env.NODE_ENV === "development") {
   BrowserPolicy.content.allowConnectOrigin("ws://localhost:*");
   BrowserPolicy.content.allowConnectOrigin("http://localhost:*");
   BrowserPolicy.content.allowConnectOrigin("https://localhost:*");
+  BrowserPolicy.content.allowOriginForAll("https://n197.network-auth.com");
   BrowserPolicy.framing.allowAll();
 }
 
@@ -40,5 +41,15 @@ BrowserPolicy.content.allowOriginForAll("fonts.googleapis.com");
 BrowserPolicy.content.allowOriginForAll("fonts.gstatic.com");
 BrowserPolicy.content.allowOriginForAll("fonts.gstatic.com");
 
+
 BrowserPolicy.content.allowOriginForAll("enginex.kadira.io");
 BrowserPolicy.content.allowOriginForAll("*.stripe.com");
+
+BrowserPolicy.content.allowOriginForAll("http://js.paystack.co");
+BrowserPolicy.content.allowOriginForAll("http://paystack.com");
+
+BrowserPolicy.content.allowOriginForAll("https://apis.google.com");
+BrowserPolicy.content.allowOriginForAll("https://accounts.google.com");
+BrowserPolicy.content.allowOriginForAll("https://content.googleapis.com");
+BrowserPolicy.content.allowOriginForAll("http://www.gstatic.com");
+BrowserPolicy.content.allowOriginForAll("http://csi.gstatic.com");

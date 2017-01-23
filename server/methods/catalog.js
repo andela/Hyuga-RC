@@ -3,7 +3,7 @@ import { EJSON } from "meteor/ejson";
 import { check } from "meteor/check";
 import { Meteor } from "meteor/meteor";
 import { Catalog } from "/lib/api";
-import { Media, Products, Revisions, Tags } from "/lib/collections";
+import { Media, Products, ProductSearch, Revisions, Tags } from "/lib/collections";
 import { Logger, Reaction } from "/server/api";
 
 /**
@@ -668,8 +668,11 @@ Meteor.methods({
       return Products.insert(product);
     }
 
+    const shopId = Reaction.getVendorId(Meteor.userId());
+
     return Products.insert({
-      type: "simple" // needed for multi-schema
+      type: "simple", // needed for multi-schema
+      shopId: shopId
     }, {
       validate: false
     }, (error, result) => {
@@ -679,7 +682,8 @@ Meteor.methods({
           ancestors: [result],
           price: 0.00,
           title: "",
-          type: "variant" // needed for multi-schema
+          type: "variant", // needed for multi-schema
+          shopId: shopId
         });
       }
     });
@@ -758,7 +762,42 @@ Meteor.methods({
     throw new Meteor.Error(304, "Something went wrong, nothing was deleted");
   },
 
-  /**
+    /**
+   * products/updateSoldField
+   * @summary update single product or variant field
+   * @param {String} _id - product._id or variant._id to update
+   * 
+   * @return {Number} returns update result
+   */
+  "products/updateSoldField": function (_id) {
+    check(_id, String);
+    // must have createProduct permission
+    if (!Reaction.hasPermission("createProduct")) {
+      throw new Meteor.Error(403, "Access Denied");
+    }
+
+    const product = Products.findOne(_id);
+    const type = product.type;
+    const sold = parseInt(product.numSold) + 1;
+    const numSold = sold.toString();
+
+    // we need to use sync mode here, to return correct error and result to UI
+    const result = ProductSearch.update(_id, {
+      $set: { numSold: numSold }
+    }, {
+      selector: {
+        type: type
+      }
+    });
+    if (typeof result === "number") {
+      if (type === "variant" && ~toDenormalize.indexOf(field)) {
+        denormalize(doc.ancestors[0], field);
+      }
+    }
+    return result;
+  },
+
+/**
    * products/updateProductField
    * @summary update single product or variant field
    * @param {String} _id - product._id or variant._id to update
@@ -799,7 +838,6 @@ Meteor.methods({
         type: type
       }
     });
-
     if (typeof result === "number") {
       if (type === "variant" && ~toDenormalize.indexOf(field)) {
         denormalize(doc.ancestors[0], field);

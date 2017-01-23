@@ -5,6 +5,7 @@ import { Template } from "meteor/templating";
 import { i18next } from "/client/api";
 import { ProductSearch, Tags, OrderSearch, AccountSearch } from "/lib/collections";
 import { IconButton, SortableTable } from "/imports/plugins/core/ui/client/components";
+import { Session } from "meteor/session";
 
 /*
  * searchModal extra functions
@@ -27,7 +28,8 @@ Template.searchModal.onCreated(function () {
     canLoadMoreProducts: false,
     searchQuery: "",
     productSearchResults: [],
-    tagSearchResults: []
+    tagSearchResults: [],
+    suggestionSearchResults: []
   });
 
 
@@ -43,23 +45,40 @@ Template.searchModal.onCreated(function () {
     }
   });
 
-
+  let brands = [];
   this.autorun(() => {
     const searchCollection = this.state.get("searchCollection") || "products";
     const searchQuery = this.state.get("searchQuery");
+    const brandPicked = this.state.get("brandPicked");
+    const priceRange = this.state.get("priceRange");
     const facets = this.state.get("facets") || [];
-    const sub = this.subscribe("SearchResults", searchCollection, searchQuery, facets);
+    const sub = this.subscribe("SearchResults", searchCollection, searchQuery,
+      facets, priceRange, brandPicked);
 
     if (sub.ready()) {
       /*
        * Product Search
        */
       if (searchCollection === "products") {
-        const productResults = ProductSearch.find().fetch();
+        const rangeBestSeller = this.state.get("bestSellers");
+        let bestSort;
+        switch (rangeBestSeller) {
+          case "high-low":
+            bestSort = -1;
+            break;
+
+          case "low-high":
+            bestSort = 1;
+            break;
+          default:
+        }
+        const productResults = ProductSearch.find({}, {
+          sort:
+          { numSold: bestSort }
+        }).fetch();
         const productResultsCount = productResults.length;
         this.state.set("productSearchResults", productResults);
         this.state.set("productSearchCount", productResultsCount);
-
         const hashtags = [];
         for (const product of productResults) {
           if (product.hashtags) {
@@ -69,11 +88,22 @@ Template.searchModal.onCreated(function () {
               }
             }
           }
+
+          if (product.brand) {
+            if (!_.includes(brands, product.brand)) {
+              brands.push(product.brand);
+            }
+          }
         }
         const tagResults = Tags.find({
           _id: { $in: hashtags }
         }).fetch();
+
+        const suggestionsResult = productResults.map(product => product.title);
+
+        this.state.set("suggestionSearchResults", suggestionsResult);
         this.state.set("tagSearchResults", tagResults);
+        this.state.set("brandSearchResult", brands);
 
         // TODO: Do we need this?
         this.state.set("accountSearchResults", "");
@@ -93,6 +123,7 @@ Template.searchModal.onCreated(function () {
         this.state.set("orderSearchResults", "");
         this.state.set("productSearchResults", "");
         this.state.set("tagSearchResults", "");
+        this.state.set("suggestionSearchResults", "");
       }
 
       /*
@@ -109,6 +140,7 @@ Template.searchModal.onCreated(function () {
         this.state.set("accountSearchResults", "");
         this.state.set("productSearchResults", "");
         this.state.set("tagSearchResults", "");
+        this.state.set("suggestionSearchResults", "");
       }
     }
   });
@@ -145,6 +177,73 @@ Template.searchModal.helpers({
     const results = instance.state.get("tagSearchResults");
     return results;
   },
+  priceOptions() {
+    return [
+      { value: "null", label: "Select Price" },
+      { value: "all", label: "All prices" },
+      { value: "below-10", label: "below - $10" },
+      { value: "10-55", label: "$10 - $55" },
+      { value: "55-100", label: "$55 - $100" },
+      { value: "100-500", label: "$100 - $500" },
+      { value: "500-1000", label: "$500 - $1000" },
+      { value: "1000-above", label: "$1000 - above" }
+    ];
+  },
+  brands() {
+    const instance = Template.instance();
+    const brands = instance.state.get("brandSearchResult");
+    if (brands) {
+      let results = [{
+        value: "&null&",
+        label: "Select brand"
+      },
+        {
+          value: "&all&",
+          label: "All brands"
+        }
+      ];
+      for (let brand = 0; brand < brands.length; brand++) {
+        results.push({
+          value: brands[brand],
+          label: brands[brand]
+        });
+      }
+
+      return results;
+    }
+  },
+  bestSellers() {
+    return [
+      { value: "one", label: "Select sales range" },
+      { value: "high-low", label: "Highest-Lowest" },
+      { value: "low-high", label: "Lowest-Highest" }
+    ];
+  },
+  brandSelect() {
+    const instance = Template.instance();
+    const brandPicked = Session.get("pickedBrand");
+    if (typeof brandPicked === "string") {
+      instance.state.set("brandPicked", brandPicked);
+    }
+  },
+  priceSelect() {
+    const instance = Template.instance();
+    const priceRange = Session.get("pickedOption");
+    if (priceRange) {
+      instance.state.set("priceRange", priceRange);
+    }
+  },
+  bestSellerSelect() {
+    const instance = Template.instance();
+    const sellerPicked = Session.get("sellerPicked");
+    if (typeof sellerPicked === "string") {
+      instance.state.set("bestSellers", sellerPicked);
+    }
+  },
+  suggestionSearchResults() {
+    const instance = Template.instance();
+    return instance.state.get("suggestionSearchResults");
+  },
   showSearchResults() {
     return false;
   }
@@ -165,7 +264,31 @@ Template.searchModal.events({
       $(".search-modal-header").addClass("active-search");
     }
   },
-  "click [data-event-action=filter]": function (event, templateInstance) {
+  "click [data-event-action=filterByTag]": function (event, templateInstance) {
+    event.preventDefault();
+    const instance = Template.instance();
+    const facets = instance.state.get("facets") || [];
+    const newFacet = $(event.target).data("event-value");
+
+    tagToggle(facets, newFacet);
+
+    $(event.target).toggleClass("active-tag btn-active");
+
+    templateInstance.state.set("facets", facets);
+  },
+  "click [data-event-action=filterByPrice]": function (event, templateInstance) {
+    event.preventDefault();
+    const instance = Template.instance();
+    const facets = instance.state.get("facets") || [];
+    const newFacet = $(event.target).data("event-value");
+
+    tagToggle(facets, newFacet);
+
+    $(event.target).toggleClass("active-tag btn-active");
+
+    templateInstance.state.set("facets", facets);
+  },
+  "click [data-event-action=filterByBrand]": function (event, templateInstance) {
     event.preventDefault();
     const instance = Template.instance();
     const facets = instance.state.get("facets") || [];

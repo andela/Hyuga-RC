@@ -22,15 +22,19 @@ Template.addressBook.onCreated(function () {
       userId: Meteor.userId()
     });
 
-    if (account) {
-      if (account.profile) {
-        if (account.profile.addressBook) {
-          if (account.profile.addressBook.length === 0) {
-            this.currentViewTemplate.set("addressBookAdd");
-          } else {
+    if (account && account.profile && account.profile.addressBook) {
+      if (account.profile.addressBook.length === 0) {
+        this.currentViewTemplate.set("addressBookAdd");
+      } else if (account.profile.addressBook[0].isVendor) {
+        Meteor.call("shop/checkExistence", Meteor.userId(), (err, res) => {
+          if (res) {
             this.currentViewTemplate.set("addressBookGrid");
+          } else {
+            this.currentViewTemplate.set("shopAddForm");
           }
-        }
+        });
+      } else {
+        this.currentViewTemplate.set("addressBookGrid");
       }
     }
   });

@@ -27,6 +27,7 @@ class ProductDetail extends Component {
   }
 
   get editable() {
+    // console.log(this.props.editable);
     return this.props.editable;
   }
 
@@ -133,8 +134,22 @@ class ProductDetail extends Component {
                   {this.props.socialComponent}
                 </div>
               </div>
-
-
+              <div>
+                <a href={"/shop/" + this.product.shopId}><strong> Visit Shop </strong></a>
+              </div>
+              <div className="vendor">
+                <ProductField
+                  editable={this.editable}
+                  fieldName="brand"
+                  fieldTitle="Brand"
+                  onProductFieldChange={this.props.onProductFieldChange}
+                  product={this.product}
+                  textFieldProps={{
+                    i18nKeyPlaceholder: "productDetailEdit.brand",
+                    placeholder: "Brand"
+                  }}
+                />
+              </div>
               <div className="vendor">
                 <ProductField
                   editable={this.editable}

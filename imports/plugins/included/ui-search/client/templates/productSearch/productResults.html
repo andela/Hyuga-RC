@@ -1,7 +1,7 @@
 <template name="productResults">
   <div class="container-main">
-    <div class="product-grid">
-      <ul class="product-grid-list list-unstyled" id="product-grid-list">
+    <div class="product-grid" style="margin-left:50px;background:#ebebeb;">
+      <ul class="product-grid-list list-unstyled" id="product-grid-list" tabindex="-1055">
         {{#each product in productSearchResults}}
           {{> productItem product=product}}
         {{else}}

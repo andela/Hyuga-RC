@@ -6,15 +6,15 @@
 
     <div class="rui search-modal-header">
 
-      {{> searchInput }}
+      {{> searchInput suggestionSearchResults=suggestionSearchResults }}
 
       {{> searchTypeToggle }}
 
-      {{> productSearchTags tagSearchResults=tagSearchResults }}
+      {{> productSearchTags tagSearchResults=tagSearchResults}}
 
     </div>
 
-    {{> searchResults productSearchResults=productSearchResults orderSearchResults=orderSearchResults accountSearchResults=accountSearchResults orderTable=orderTable accountTable=accountTable }}
+    {{> searchResults priceOptions=priceOptions brands=brands bestSellers=bestSellers bestSellerSelect=bestSellerSelect brandSelect=brandSelect handleSelect=priceSelect productSearchResults=productSearchResults orderSearchResults=orderSearchResults accountSearchResults=accountSearchResults orderTable=orderTable accountTable=accountTable }}
 
   </div>
 

@@ -16,7 +16,16 @@ import "./templates/layout/loading/loading.html";
 import "./templates/layout/notFound/notFound.html";
 import "./templates/layout/notFound/notFound.js";
 import "./templates/layout/notice/unauthorized.html";
+import "./templates/layout/staticpages/pageView.html";
+import "./templates/layout/staticpages/pageView.js";
+import "./templates/layout/staticpages/shopView.html";
+import "./templates/layout/staticpages/shopView.js";
 import "./templates/layout/layout.html";
+import "./templates/layout/wallet/payment.js";
+import "./templates/layout/wallet/wallet.html";
+import "./templates/layout/wallet/wallet.js";
+import "./templates/layout/analytics/analytics.html";
+import "./templates/layout/analytics/analytics.js";
 
 import "./templates/theme/theme.html";
 import "./templates/theme/theme.js";

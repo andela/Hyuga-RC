@@ -178,11 +178,13 @@
    */
 }
 
+
 .rui.navbar .accounts .dropdown .user-accounts-dropdown-content {
   /**
    * @label Accounts Dropdown Content
    */
   color: --;
+  
 }
 
 .rui.navbar .accounts .dropdown ul {
@@ -236,3 +238,5 @@
    */
   border: --;
 }
+
+

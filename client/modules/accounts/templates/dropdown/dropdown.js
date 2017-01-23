@@ -4,6 +4,15 @@ import { Session } from "meteor/session";
 import { Meteor } from "meteor/meteor";
 import { Template } from "meteor/templating";
 
+Template.accountsDropdownApps.helpers({
+  /**
+   * Check if the user is an admin.
+   * @returns boolean
+   */
+  checkAdmin() {
+    return Reaction.hasPermission("admin");
+  }
+});
 Template.loginDropdown.events({
 
   /**
@@ -33,6 +42,25 @@ Template.loginDropdown.events({
     });
   },
 
+  /**
+   * Wallet form
+   * @param  {Event} event - jQuery Event
+   * @return {void}
+   */
+  "click #wallet": (event) => {
+    event.preventDefault();
+    FlowRouter.go("/wallet");
+  },
+
+ /**
+   * analytics button
+   * @param  {Event} event - jQuery Event
+   * @return {void}
+   */
+  "click #analytics": (event) => {
+    event.preventDefault();
+    FlowRouter.go("/analytics");
+  },
   /**
    * Submit sign up form
    * @param  {Event} event - jQuery Event

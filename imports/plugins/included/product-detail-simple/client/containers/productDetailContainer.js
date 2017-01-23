@@ -154,8 +154,8 @@ class ProductDetailContainer extends Component {
             onAddToCart={this.handleAddToCart}
             onCartQuantityChange={this.handleCartQuantityChange}
             onViewContextChange={this.handleViewContextChange}
-            socialComponent={<SocialContainer />}
-            topVariantComponent={<VariantListContainer />}
+            socialComponent={<SocialContainer editRight={this.props.hasAdminPermission} />}
+            topVariantComponent={<VariantListContainer editRight={this.props.hasAdminPermission} />}
             onDeleteProduct={this.handleDeleteProduct}
             onProductFieldChange={this.handleProductFieldChange}
             {...this.props}
@@ -167,6 +167,7 @@ class ProductDetailContainer extends Component {
 }
 
 ProductDetailContainer.propTypes = {
+  hasAdminPermission: PropTypes.bool,
   media: PropTypes.arrayOf(PropTypes.object),
   product: PropTypes.object
 };
@@ -176,7 +177,7 @@ function composer(props, onData) {
   const productId = Reaction.Router.getParam("handle");
   const variantId = Reaction.Router.getParam("variantId");
   const revisionType = Reaction.Router.getQueryParam("revision");
-  const viewProductAs = Reaction.Router.getQueryParam("as");
+  let viewProductAs = Reaction.Router.getQueryParam("as");
 
   let productSub;
 
@@ -236,23 +237,33 @@ function composer(props, onData) {
         productRevision = product.__published;
       }
 
-      let editable;
+      let editable = false;
+      let hasAdminPermission = false;
 
-      if (viewProductAs === "customer") {
-        editable = false;
+      setData = function () {
+        onData(null, {
+          product: productRevision || product,
+          priceRange,
+          tags,
+          media: mediaArray,
+          editable,
+          viewAs: viewProductAs,
+          hasAdminPermission
+        });
+      };
+
+      if (Reaction.hasPermission(["createProduct"])) {
+        Meteor.call("shop/getShopId", Meteor.userId(), (err, res) => {
+          if ((res && res._id === product.shopId) ||
+          (!res && Reaction.hasPermission("admin") && Reaction.getShopId() === product.shopId)) {
+            editable = true;
+            hasAdminPermission = true;
+          }
+          setData();
+        });
       } else {
-        editable = Reaction.hasPermission(["createProduct"]);
+        setData();
       }
-
-      onData(null, {
-        product: productRevision || product,
-        priceRange,
-        tags,
-        media: mediaArray,
-        editable,
-        viewAs: viewProductAs,
-        hasAdminPermission: Reaction.hasPermission(["createProduct"])
-      });
     }
   }
 }

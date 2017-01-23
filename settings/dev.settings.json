@@ -7,5 +7,7 @@
     "REACTION_EMAIL": ""
   },
   "isDebug": "info",
-  "public": {}
+  "public": {},
+  "JUSIBE_PUBLIC_KEY": "ABCDEF12345",
+  "JUSIBE_TOKEN": "ABCDEF12345"
 }

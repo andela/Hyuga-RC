@@ -186,13 +186,7 @@ function composer(props, onData) {
     }).fetch();
   }
 
-  let editable;
-
-  if (Reaction.Router.getQueryParam("as") === "customer") {
-    editable = false;
-  } else {
-    editable = Reaction.hasPermission(["createProduct"]);
-  }
+  const editable = props.editRight;
 
   onData(null, {
     variants: getTopVariants(),

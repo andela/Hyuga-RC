@@ -26,6 +26,7 @@ export function getAddress(options = {}) {
     isCommercial: faker.random.boolean(),
     isShippingDefault: faker.random.boolean(),
     isBillingDefault: faker.random.boolean(),
+    isVendor: faker.random.boolean(),
     metafields: []
   };
   return _.defaults(options, defaults);

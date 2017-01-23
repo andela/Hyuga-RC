@@ -1,9 +1,81 @@
+import { Meteor } from "meteor/meteor";
 import { FlatButton } from "/imports/plugins/core/ui/client/components";
 import { Reaction } from "/client/api";
-import { Tags } from "/lib/collections";
+import { Template } from "meteor/templating";
+import { FlowROuter } from "meteor/kadira:flow-router-ssr";
+import { Tags, StaticPages } from "/lib/collections";
 
+
+Template.notificationItem.onCreated(function () {
+  this.notifications = ReactiveVar();
+
+  // Create an auto run to Check for notifications on page load
+  // and set the notification reactive variable.
+  this.autorun(() => {
+    const instance = this;
+    Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
+      instance.notifications.set(res);
+    });
+  });
+});
+
+Template.notificationDropdown.onCreated(function () {
+  this.notifications = ReactiveVar();
+
+  // Create an auto run to Check for notifications on page load
+  // and set the notification reactive variable.
+  this.autorun(() => {
+    const instance = this;
+    Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
+      instance.notifications.set(res.length);
+    });
+  });
+});
+
+Template.dropDownNotifications.events({
+    /**
+   * Clear Notifications
+   * @param  {Event} event - jQuery Event
+   * @return {void}
+   */
+  "click #clearNotifications": (event) => {
+    event.preventDefault();
+    Meteor.call("notifications/clearNotifications", Meteor.userId(), (err, res) => {
+      // Do nothing
+    });
+  }
+});
+
+Template.notificationDropdown.helpers({
+  NotificationIcon() {
+  // Check if the user has pending notifications
+  // and set the appropriate Icon
+    return (Template.instance().notifications.get() > 0)
+    ? "fa fa-bell"
+    : "fa fa-bell-o";
+  },
+  checkNotification() {
+    return (Template.instance().notifications.get() > 0);
+  }
+});
+Template.notificationItem.helpers({
+  showNotification() {
+    // Change the display state of the notification to show the latest notification when clicked
+    return Template.instance().notifications.get();
+  }
+});
 Template.CoreNavigationBar.onCreated(function () {
   this.state = new ReactiveDict();
+  this.notification = ReactiveVar();
+
+  // Create an auto run to Check for notifications on page load
+  // and set the notification reactive variable.
+  this.autorun(() => {
+    const instance = this;
+    Meteor.call("notifications/getNotifications", Meteor.userId(), (err, res) => {
+      instance.notification.set(!!res);
+    });
+  });
 });
 
 /**

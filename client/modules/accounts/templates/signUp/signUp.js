@@ -1,5 +1,6 @@
 import { LoginFormSharedHelpers } from "/client/modules/accounts/helpers";
 import { Template } from "meteor/templating";
+import { FlowRouter } from "meteor/kadira:flow-router-ssr";
 
 /**
  * onCreated: Login form sign up view
@@ -30,13 +31,15 @@ Template.loginFormSignUpView.events({
   "submit form": function (event, template) {
     event.preventDefault();
 
-    // var usernameInput = template.$(".login-input--username");
+    const usernameInput = template.$(".login-input-username");
     const emailInput = template.$(".login-input-email");
     const passwordInput = template.$(".login-input-password");
 
+    const username = usernameInput.val().trim();
     const email = emailInput.val().trim();
     const password = passwordInput.val().trim();
 
+    const validatedUsername = LoginFormValidation.username(username);
     const validatedEmail = LoginFormValidation.email(email);
     const validatedPassword = LoginFormValidation.password(password);
 
@@ -44,6 +47,10 @@ Template.loginFormSignUpView.events({
     const errors = {};
 
     templateInstance.formMessages.set({});
+
+    if (validatedUsername !== true) {
+      errors.username = validatedUsername;
+    }
 
     if (validatedEmail !== true) {
       errors.email = validatedEmail;
@@ -62,7 +69,7 @@ Template.loginFormSignUpView.events({
     }
 
     const newUserData = {
-      // username: username,
+      username: username,
       email: email,
       password: password
     };
@@ -75,6 +82,7 @@ Template.loginFormSignUpView.events({
         });
       } else {
         // Close dropdown or navigate to page
+        FlowRouter.go("/reaction/account/profile");
       }
     });
   }
